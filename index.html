@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Coach Lanz — Physical Fitness & Recovery Coach</title>
+<meta name="description" content="Coach Lanz — 1-on-1 physical fitness & recovery coaching. Fat loss, strength, Muay Thai / Boxing fitness, mobility and active aging. Based in Cavite, coaching online worldwide." />
+<style>
+:root{
+  --bg:#0c1110; --bg2:#111817; --card:#161f1e; --line:#243431;
+  --text:#eef5f1; --muted:#a7bcb4; --accent:#c8f04a; --accent2:#3ddc84;
+  --orange:#ff7a1a; --radius:18px;
+  --font:system-ui,-apple-system,"Segoe UI",Roboto,Inter,Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.6}
+a{color:inherit}
+.container{max-width:1100px;margin:0 auto;padding:0 20px}
+header{position:sticky;top:0;z-index:50;background:rgba(12,17,16,.88);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;max-width:1100px;margin:0 auto}
+.brand{display:flex;gap:12px;align-items:center;text-decoration:none;font-weight:800;letter-spacing:.02em}
+.brand-mark{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:grid;place-items:center;color:#0c1110;font-weight:900;font-size:20px}
+.brand small{display:block;font-weight:500;color:var(--muted);font-size:12px;line-height:1.2}
+.nav-links{display:flex;gap:18px;align-items:center;font-size:15px}
+.nav-links a{text-decoration:none;color:var(--muted)}
+.nav-links a:hover{color:var(--text)}
+.btn{display:inline-block;background:var(--accent);color:#0f150f;font-weight:800;padding:13px 22px;border-radius:999px;text-decoration:none;border:0;cursor:pointer;font-size:15px}
+.btn:hover{filter:brightness(1.05)}
+.btn-ghost{background:transparent;color:var(--text);border:1px solid var(--line)}
+.btn-sm{padding:10px 16px;font-size:14px}
+.hero{padding:72px 0 36px;background:
+ radial-gradient(700px 400px at 20% 0%,rgba(200,240,74,.14),transparent),
+ radial-gradient(700px 400px at 90% 20%,rgba(61,220,132,.14),transparent)}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;background:#182220;border:1px solid var(--line);padding:8px 14px;border-radius:999px;font-size:13px;color:var(--muted)}
+.eyebrow b{color:var(--accent)}
+h1{font-size:clamp(36px,6vw,62px);line-height:1.02;margin:18px 0 12px;letter-spacing:-.02em}
+h1 span{color:var(--accent)}
+.lead{color:var(--muted);font-size:clamp(16px,2.2vw,19px);max-width:640px}
+.hero-cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
+.hero-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:28px;align-items:start;margin-top:28px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:22px}
+.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px}
+.stat{background:#0f1615;border:1px solid var(--line);border-radius:14px;padding:14px;text-align:center}
+.stat b{font-size:22px;color:var(--accent);display:block}
+.stat span{font-size:13px;color:var(--muted)}
+.coach-card{text-align:center}
+.avatar{width:96px;height:96px;border-radius:50%;margin:0 auto 10px;background:linear-gradient(135deg,#2a3d39,#182220);border:2px solid var(--accent);display:grid;place-items:center;font-size:42px}
+.quote{font-style:italic;color:#d6e7df;background:#0f1615;border-left:3px solid var(--accent);padding:12px 14px;border-radius:0 12px 12px 0;margin:14px 0;font-size:15px}
+section{padding:56px 0}
+.section-title{font-size:clamp(26px,4vw,38px);margin:0 0 8px;letter-spacing:-.02em}
+.section-sub{color:var(--muted);margin:0 0 26px;max-width:700px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.service{position:relative;overflow:hidden}
+.service .icon{font-size:30px}
+.service h3{margin:10px 0 6px}
+.service p{color:var(--muted);font-size:15px;margin:0 0 12px}
+.tag{display:inline-block;font-size:12px;background:#0f1615;border:1px solid var(--line);color:var(--accent);padding:4px 10px;border-radius:999px;margin:2px 4px 2px 0}
+ul.check{list-style:none;padding:0;margin:12px 0 0}
+ul.check li{padding-left:28px;position:relative;margin:8px 0;color:#d6e7df;font-size:15px}
+ul.check li::before{content:"✓";position:absolute;left:0;top:0;color:var(--accent);font-weight:900}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.step-num{font-size:13px;font-weight:800;color:#0c1110;background:var(--accent);display:inline-block;padding:3px 10px;border-radius:999px;margin-bottom:10px}
+.calc{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+label{font-size:13px;color:var(--muted);display:block;margin:10px 0 6px}
+input,select,textarea{width:100%;background:#0f1615;border:1px solid var(--line);color:var(--text);border-radius:12px;padding:12px 14px;font-size:15px;font-family:inherit}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--accent);border-color:transparent}
+.testis{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.stars{color:var(--accent);letter-spacing:2px}
+.faq details{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:10px 0}
+.faq summary{cursor:pointer;font-weight:700}
+.faq p{color:var(--muted)}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.full{grid-column:1/-1}
+.result-box{display:none;margin-top:14px;background:#0f1615;border:1px dashed var(--accent);border-radius:14px;padding:16px}
+footer{border-top:1px solid var(--line);padding:32px 0;color:var(--muted);font-size:14px}
+.footer-grid{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.mobile-menu-btn{display:none;background:none;border:1px solid var(--line);color:var(--text);border-radius:10px;padding:8px 12px;font-size:18px}
+@media(max-width:860px){
+  .hero-grid,.grid-3,.grid-2,.calc,.testis,.steps{grid-template-columns:1fr}
+  .form-grid{grid-template-columns:1fr}
+  .nav-links{display:none;position:absolute;top:68px;left:0;right:0;background:#0f1615;flex-direction:column;padding:16px;border-bottom:1px solid var(--line)}
+  .nav-links.open{display:flex}
+  .mobile-menu-btn{display:block}
+  .stat-row{grid-template-columns:repeat(3,1fr)}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav">
+    <a class="brand" href="#top">
+      <div class="brand-mark">LZ</div>
+      <div>COACH LANZ<small>Fitness • Recovery Coaching</small></div>
+    </a>
+    <button class="mobile-menu-btn" onclick="document.querySelector('.nav-links').classList.toggle('open')">☰</button>
+    <nav class="nav-links">
+      <a href="#about">About</a>
+      <a href="#coaching">Coaching</a>
+      <a href="#recovery">Recovery</a>
+      <a href="#method">Method</a>
+      <a href="#results">Results</a>
+      <a href="#faq">FAQ</a>
+      <a class="btn btn-sm" href="#book">Book Free Assessment</a>
+    </nav>
+  </div>
+</header>
+
+<div id="top" class="hero">
+  <div class="container">
+    <div class="eyebrow">🔥 <b>1-on-1 COACHING</b> &nbsp;•&nbsp; In-person & Online &nbsp;•&nbsp; Beginners welcome</div>
+    <h1>MOVE STRONG.<br>RECOVER SMARTER.<br><span>STAY ACTIVE FOR LIFE.</span></h1>
+    <p class="lead">Personal physical fitness & recovery coaching with Coach Lanz — fat loss, strength, combat-based conditioning (Muay Thai / Boxing fitness), mobility and active aging. No big gym crowds. Just a plan built for your body and your life.</p>
+    <div class="hero-cta">
+      <a class="btn" href="#book">Claim FREE Assessment →</a>
+      <a class="btn btn-ghost" href="#coaching">Explore Coaching</a>
+    </div>
+
+    <div class="hero-grid">
+      <div class="card">
+        <b>Why train with Lanz?</b>
+        <ul class="check">
+          <li><b>Real striking + S&C background</b> — Muay Thai, Boxing, strength & conditioning fundamentals</li>
+          <li><b>Beginner-proof system</b> — first 2 weeks: basics, technique & habit-building, zero pressure</li>
+          <li><b>Fitness + recovery in one plan</b> — train hard, mobilize, sleep & eat to bounce back faster</li>
+          <li><b>Tracked every 30 days</b> — weight, photos, strength & mobility check-ins</li>
+        </ul>
+        <div class="stat-row">
+          <div class="stat"><b>90-day</b><span>Beginner-to-confident system</span></div>
+          <div class="stat"><b>1-on-1</b><span>Personal, not group class</span></div>
+          <div class="stat"><b>40+</b><span>Fat-loss & recovery wins*</span></div>
+        </div>
+        <p style="font-size:12px;color:var(--muted)">*Illustrative coaching outcomes. Your results depend on consistency, nutrition & recovery.</p>
+      </div>
+      <div class="card coach-card">
+        <div class="avatar">🥊</div>
+        <h3 style="margin:6px 0">Coach Lanz</h3>
+        <p style="color:var(--muted);font-size:14px;margin:0">Physical Fitness & Recovery Coach<br>Muay Thai • Boxing • Strength & Conditioning • Mobility</p>
+        <div class="quote">“Bakal lang kinakalawang, kondisyon hindi — basta sipag lang. Ang goal: kahit senior na, malakas pa din at active.”</div>
+        <p style="font-size:13px;color:var(--muted)">Based in Cavite, Philippines • Coaching online worldwide<br>First assessment FREE • No commitment</p>
+        <a class="btn btn-sm" href="#book">Start With Free Assessment</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section id="about">
+  <div class="container grid-2">
+    <div>
+      <h2 class="section-title">Not a gym membership.<br>A coach in your corner.</h2>
+      <p class="section-sub">Most programs give you workouts. Coach Lanz gives you coaching, accountability, and recovery — so you don't burn out or get injured.</p>
+      <ul class="check">
+        <li>Zero experience? 70% of beginners start from zero — stance, footwork, breathing, light technique first</li>
+        <li>Busy schedule? 2–3x / week, 45–60 min sessions + simple home mobility work</li>
+        <li>Coming back from a layoff / feeling stiff? Low-impact start with mobility + progressive strength</li>
+        <li>Senior / 40+ and want to stay active? Joint-friendly strength, balance & conditioning</li>
+      </ul>
+      <p style="margin-top:16px"><a class="btn btn-ghost btn-sm" href="#method">See how coaching works</a></p>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0">⚖️ Free Body Check — know your starting point</h3>
+      <p style="color:var(--muted);font-size:14px">Quick BMI + estimated daily calories. Bring this to your free assessment.</p>
+      <div class="calc">
+        <div>
+          <label>Height (cm)</label><input id="h" type="number" placeholder="170" />
+          <label>Weight (kg)</label><input id="w" type="number" placeholder="75" />
+        </div>
+        <div>
+          <label>Age</label><input id="age" type="number" placeholder="30" />
+          <label>Goal</label>
+          <select id="goal"><option>Lose fat</option><option>Build muscle</option><option>Learn striking fitness</option><option>Move pain-free / recover</option><option>Stay active as a senior</option></select>
+        </div>
+      </div>
+      <button class="btn btn-sm" style="margin-top:12px" onclick="calcPlan()">Calculate My Plan →</button>
+      <div id="calcOut" class="result-box"></div>
+    </div>
+  </div>
+</section>
+
+<section id="coaching" style="background:var(--bg2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+  <div class="container">
+    <h2 class="section-title">Fitness coaching for every goal</h2>
+    <p class="section-sub">Pick your track. Every plan includes warm-up, coaching, cool-down + recovery guidance.</p>
+    <div class="grid-3">
+      <div class="card service"><div class="icon">🔥</div><h3>Fat Loss & Conditioning</h3><p>Metabolic circuits, kettlebells, ropes & bodyweight. Burn 400–600 kcal / session with beginner-friendly scaling.</p><span class="tag">2–3x / week</span><span class="tag">Meal guide</span><ul class="check"><li>Monthly weigh-ins + habit tracking</li><li>Home workout option</li></ul></div>
+      <div class="card service"><div class="icon">💪</div><h3>Strength & Muscle</h3><p>Push / Pull / Legs progression, dumbbell & barbell basics, form-first coaching and PR tracking.</p><span class="tag">Form-first</span><span class="tag">All levels</span><ul class="check"><li>Personalized progression</li><li>Mobility warm-ups included</li></ul></div>
+      <div class="card service"><div class="icon">🥊</div><h3>Striking Fitness (Muay Thai / Boxing)</h3><p>Jab-cross-hook, kicks, footwork, pad & bag rounds for fitness — no hard sparring required. Confidence + cardio.</p><span class="tag">Beginner track</span><span class="tag">Self-defense basics</span><ul class="check"><li>Technique correction every session</li><li>Optional light technical sparring only</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<section id="recovery">
+  <div class="container">
+    <h2 class="section-title">Recovery coaching — train without breaking down</h2>
+    <p class="section-sub">Recovery is half the program. Especially if you're 30+, sitting all day, or returning to training.</p>
+    <div class="grid-3">
+      <div class="card service"><div class="icon">🧘</div><h3>Mobility & Injury Prevention</h3><p>Hips, shoulders, ankles & spine — 10–15 min daily routines to move pain-free and lift safer.</p><ul class="check"><li>Desk-worker posture reset</li><li>Pre / post-workout warm-ups</li></ul></div>
+      <div class="card service"><div class="icon">😴</div><h3>Sleep, Nutrition & Recharge</h3><p>Macros breakdown, meal-prep guide, supplement basics & sleep habits that actually speed up fat loss and muscle repair.</p><ul class="check"><li>Simple Filipino-friendly meals</li><li>Weekly check-ins</li></ul></div>
+      <div class="card service"><div class="icon">🧓</div><h3>Active Aging 40+ / Seniors</h3><p>Joint-friendly strength, balance & conditioning. Goal: malakas pa din at active kahit senior na.</p><ul class="check"><li>Low-impact, joint-safe</li><li>Balance + bone health focus</li></ul></div>
+    </div>
+    <div class="card" style="margin-top:16px;display:flex;gap:16px;flex-wrap:wrap;align-items:center;justify-content:space-between">
+      <div><b>💻 Online coaching available worldwide</b><br><span style="color:var(--muted)">Custom program + video form review + weekly goal updates on Messenger. Train at home or any gym.</span></div>
+      <a class="btn btn-sm" href="#book">Ask About Online Coaching</a>
+    </div>
+  </div>
+</section>
+
+<section id="method" style="background:var(--bg2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+  <div class="container">
+    <h2 class="section-title">The Lanz Method — Assess. Train. Recover. Repeat.</h2>
+    <p class="section-sub">Simple, sustainable, tracked.</p>
+    <div class="steps">
+      <div class="card"><span class="step-num">STEP 1</span><h3>Assess</h3><p style="color:var(--muted)">Free assessment: goal, history, movement screen, BMI + calories. You get a recommended track.</p></div>
+      <div class="card"><span class="step-num">STEP 2</span><h3>Train</h3><p style="color:var(--muted)">2–3x/week personal sessions (in-person or online). Technique first, intensity second.</p></div>
+      <div class="card"><span class="step-num">STEP 3</span><h3>Recover</h3><p style="color:var(--muted)">Mobility plan, sleep + meal guide, rest-day walks. No crash diets, no burnout.</p></div>
+      <div class="card"><span class="step-num">STEP 4</span><h3>Track</h3><p style="color:var(--muted)">Every 30 days: weight, photos, strength & mobility review. Adjust plan, keep winning.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="results">
+  <div class="container">
+    <h2 class="section-title">Real people. Real consistency.</h2>
+    <p class="section-sub">Coaching wins from beginners, busy professionals and returning athletes.*</p>
+    <div class="testis">
+      <div class="card"><div class="stars">★★★★★</div><h3>"Lost 12kg in 3 months — and learned to fight for fitness!"</h3><p style="color:var(--muted)">"Zero experience. Coach scaled everything. 3x/week + meal guide. Best decision ever."<br><b>— J., 29</b></p></div>
+      <div class="card"><div class="stars">★★★★★</div><h3>"From stiff desk worker to moving pain-free"</h3><p style="color:var(--muted)">"Mobility + strength fixed my back pain. I recover faster and sleep better now."<br><b>— R., 35</b></p></div>
+      <div class="card"><div class="stars">★★★★★</div><h3>"At 52, I'm stronger and more active than at 40"</h3><p style="color:var(--muted)">"Joint-friendly program, patient coaching. Blood pressure and energy all improved."<br><b>— T., 52</b></p></div>
+    </div>
+    <p style="font-size:12px;color:var(--muted)">*Testimonials are illustrative of typical coaching experiences. Individual results vary.</p>
+  </div>
+</section>
+
+<section id="book" style="background:linear-gradient(180deg,#101915,#0c1110);border-top:1px solid var(--line)">
+  <div class="container grid-2">
+    <div>
+      <h2 class="section-title">Claim your FREE fitness + recovery assessment</h2>
+      <p class="section-sub">30 seconds. No payment, no commitment. Coach Lanz will message you to confirm your slot.</p>
+      <ul class="check">
+        <li>You get a booking reference instantly</li>
+        <li>Confirm via Facebook Messenger</li>
+        <li>Bring workout clothes + towel + water</li>
+      </ul>
+      <div class="card" style="margin-top:16px">
+        <b>💬 Prefer to message directly?</b><br>
+        <a href="https://www.facebook.com/profile.php?id=61590590284675" target="_blank" rel="noopener" style="color:var(--accent);font-weight:700">→ Message Coach Lanz on Facebook</a>
+        <br><span style="font-size:13px;color:var(--muted)">Based in Cavite, PH • Online worldwide • Reply within 24h</span>
+      </div>
+    </div>
+    <div class="card">
+      <form id="bookForm" onsubmit="return submitBooking(event)">
+        <div class="form-grid">
+          <div><label>Full Name *</label><input id="fName" required placeholder="Juan Dela Cruz" /></div>
+          <div><label>Mobile / Messenger No. *</label><input id="fPhone" required placeholder="09xx xxx xxxx" /></div>
+          <div><label>Coaching Type *</label><select id="fType"><option>Fat Loss / Conditioning</option><option>Strength / Muscle</option><option>Striking Fitness (Muay Thai / Boxing)</option><option>Recovery / Mobility / Active Aging</option><option>Online Coaching</option></select></div>
+          <div><label>Mode *</label><select id="fMode"><option>In-person (Cavite area)</option><option>Online (anywhere)</option></select></div>
+          <div><label>Experience</label><select id="fExp"><option>Zero experience</option><option>Some experience</option><option>Experienced</option></select></div>
+          <div><label>Preferred Date *</label><input id="fDate" type="date" required /></div>
+          <div class="full"><label>Goal (optional)</label><textarea id="fGoal" rows="3" placeholder="e.g. Lose 10kg, fix back stiffness, stay active at 50..."></textarea></div>
+        </div>
+        <button class="btn" style="width:100%;margin-top:14px" type="submit">Claim FREE Assessment →</button>
+        <div id="bookOut" class="result-box"></div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="container faq" style="max-width:800px">
+    <h2 class="section-title">FAQ</h2>
+    <details open><summary>I'm a complete beginner. Can I join?</summary><p>Yes — most start with zero experience. First 2 weeks are basics only: movement, breathing, light technique. No sparring, no pressure.</p></details>
+    <details><summary>What do I need for the first session / online coaching?</summary><p>Workout clothes, towel, water. For online: phone stand + 2x2m space + optional dumbbells or bands. Hand wraps / gloves guidance provided if you pick striking fitness.</p></details>
+    <details><summary>Do I have to spar if I pick Muay Thai / Boxing fitness?</summary><p>No. Striking fitness is pad + bag + footwork for cardio and confidence. Sparring is 100% optional, light, supervised and gear-required.</p></details>
+    <details><summary>How fast will I see results?</summary><p>With 2–3x/week + meal + sleep habits, most see 3–5kg fat loss / month or visible strength gains in 6–8 weeks. Recovery (sleep, stiffness, energy) often improves in 2–3 weeks.</p></details>
+    <details><summary>Do you coach seniors or people with old injuries?</summary><p>Yes — that’s a specialty. Joint-friendly strength, balance and mobility. We start easy, progress safely, and coordinate with your doctor/physio if needed. Not medical advice — coaching only.</p></details>
+    <details><summary>How do online sessions work?</summary><p>Video call + custom program + form video review + weekly Messenger check-ins. Same tracking as in-person.</p></details>
+  </div>
+</section>
+
+<section style="text-align:center;padding:40px 0 70px">
+  <div class="container">
+    <h2 class="section-title">Stop scrolling. Start moving. 🥊</h2>
+    <p class="section-sub" style="margin:0 auto 20px">Your first assessment is FREE. Your future self will thank you.</p>
+    <a class="btn" href="#book">Claim FREE Assessment</a>
+  </div>
+</section>
+
+<footer>
+  <div class="container footer-grid">
+    <div><b style="color:var(--text)">🥊 COACH LANZ</b><br>Physical Fitness & Recovery Coaching<br>Cavite, Philippines • Online worldwide<br>© 2026 Coach Lanz. Train hard, recover harder.</div>
+    <div><a href="#coaching">Coaching</a> • <a href="#recovery">Recovery</a> • <a href="#book">Book</a><br><a href="https://www.facebook.com/profile.php?id=61590590284675" target="_blank" rel="noopener">Facebook</a> • <a href="#top">Back to top ↑</a></div>
+  </div>
+</footer>
+
+<script>
+function calcPlan(){
+  const h=parseFloat(document.getElementById('h').value), w=parseFloat(document.getElementById('w').value), age=parseFloat(document.getElementById('age').value)||30;
+  const goal=document.getElementById('goal').value, out=document.getElementById('calcOut');
+  if(!h||!w){ out.style.display='block'; out.innerHTML='Please enter height & weight.'; return; }
+  const bmi=w/((h/100)*(h/100));
+  let cat=bmi<18.5?'Underweight':bmi<25?'Healthy':bmi<30?'Overweight':'Obese';
+  const bmr=10*w+6.25*h-5*age+5;
+  const tdee=Math.round(bmr*1.45);
+  let rec = goal.includes('Lose')?'Fat Loss & Conditioning 3x/week + daily 10-min mobility + calorie target ~'+(tdee-400)+' kcal.':goal.includes('Muscle')?'Strength & Muscle 3x/week + protein ~'+Math.round(w*1.8)+'g/day + sleep 7-8h.':goal.includes('striking')?'Striking Fitness 2x/week + 1x conditioning + mobility for shoulders/hips.':goal.includes('pain')?'Recovery track: 2x strength + 3x mobility + sleep reset. Start easy.':'Active Aging: 2x joint-friendly strength + balance + daily walks.';
+  out.style.display='block';
+  out.innerHTML='<b>BMI: '+bmi.toFixed(1)+' ('+cat+')</b><br>Est. maintenance: ~'+tdee+' kcal/day<br><br>✅ Recommended: '+rec+'<br><br><a href="#book" style="color:var(--accent);font-weight:800">Book free assessment to confirm →</a>';
+}
+document.getElementById('fDate').min=new Date().toISOString().split('T')[0];
+function submitBooking(e){
+  e.preventDefault();
+  const name=document.getElementById('fName').value.trim(), phone=document.getElementById('fPhone').value.trim();
+  if(!name||!phone){alert('Please enter name and mobile.');return false;}
+  const ref='LZ-'+Math.random().toString(36).slice(2,7).toUpperCase();
+  const type=document.getElementById('fType').value, mode=document.getElementById('fMode').value, date=document.getElementById('fDate').value;
+  const out=document.getElementById('bookOut');
+  out.style.display='block';
+  out.innerHTML='🎉 <b>You\'re in, '+name.split(' ')[0]+'!</b><br>Ref: <b>'+ref+'</b> • '+type+' • '+mode+' • '+date+'<br><br>Screenshot this, then <a href="https://www.facebook.com/profile.php?id=61590590284675" target="_blank" rel="noopener" style="color:var(--accent);font-weight:800">message Coach Lanz on Facebook to confirm →</a>';
+  out.scrollIntoView({behavior:'smooth',block:'center'});
+  return false;
+}
+</script>
+</body>
+</html>
