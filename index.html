@@ -8,132 +8,149 @@
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"Person","name":"Kru Elizardo Vallega","alternateName":"Coach Lanz","jobTitle":"Muay Thai & Fitness Coach","description":"Founder & Head of the Philippine Thai Boxing Association. 1-on-1 Muay Thai, fat & weight loss, strength and online coaching.","address":{"@type":"PostalAddress","addressLocality":"Imus City","addressRegion":"Cavite","addressCountry":"PH"},"telephone":"+639063771210","sameAs":["https://www.facebook.com/p/Kru-Lanz-Fitness-Gym-100076342784628/"]}
 </script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;0,900;1,600;1,800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 <style>
 :root{
-  --bg:#0c0c0e; --bg2:#141417; --card:#1a1a1f; --card2:#222228;
-  --line:#2a2a32; --ink:#f5f5f4; --muted:#a8a8b3;
-  --red:#e62e2e; --red-dark:#b91c1c; --gold:#ffc947; --green:#22c55e;
-  --radius:16px;
+  --bg:#0a0908; --bg2:#100e0b; --card:#14110d; --card2:#1a1611;
+  --line:#2c2517; --line-gold:#6b5726;
+  --gold:#d4a92c; --gold-hi:#f2d675; --gold-deep:#8a6d1c;
+  --cream:#f5eedd; --muted:#a89d88;
+  --radius:14px;
+  --serif:'Playfair Display',Georgia,'Times New Roman',serif;
+  --sans:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
-.container{max-width:1120px;margin:0 auto;padding:0 20px}
+body{margin:0;font-family:var(--sans);background:var(--bg);color:var(--cream);line-height:1.65;-webkit-font-smoothing:antialiased}
+.container{max-width:1120px;margin:0 auto;padding:0 22px}
+::selection{background:var(--gold);color:#111}
 /* NAV */
-.nav{position:sticky;top:0;z-index:50;background:rgba(12,12,14,.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
-.nav-inner{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;max-width:1120px;margin:0 auto}
-.brand{display:flex;align-items:center;gap:12px;font-weight:900;letter-spacing:.5px;font-size:18px}
-.brand-mark{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--red),#7f1d1d);display:grid;place-items:center;font-size:24px;border:1px solid #ff6b6b33;box-shadow:0 4px 20px rgba(230,46,46,.35)}
-.brand small{display:block;font-weight:600;color:var(--gold);font-size:11px;letter-spacing:2px}
-.nav-links{display:flex;gap:20px;align-items:center;font-size:15px}
-.nav-links a{text-decoration:none;color:var(--muted);font-weight:500}
-.nav-links a:hover{color:#fff}
-.btn{display:inline-block;background:var(--red);color:#fff;border:0;padding:13px 26px;border-radius:999px;font-weight:800;cursor:pointer;text-decoration:none;font-size:15px;transition:.2s}
-.btn:hover{background:var(--red-dark);transform:translateY(-1px)}
-.btn-gold{background:var(--gold);color:#111}
-.btn-gold:hover{background:#eab308}
-.btn-outline{background:transparent;color:#fff;border:2px solid #3a3a44}
-.btn-outline:hover{border-color:var(--red);color:#fff}
-.menu-btn{display:none;background:none;border:1px solid var(--line);border-radius:8px;padding:8px 12px;font-size:18px;color:#fff}
+.nav{position:sticky;top:0;z-index:50;background:rgba(10,9,8,.94);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;padding:14px 22px;max-width:1120px;margin:0 auto}
+.brand{display:flex;align-items:center;gap:12px;font-family:var(--serif);font-weight:800;font-size:21px;letter-spacing:.5px}
+.brand-mark{width:44px;height:44px;border-radius:50%;background:radial-gradient(circle at 30% 30%,var(--gold-hi),var(--gold) 55%,var(--gold-deep));color:#141005;display:grid;place-items:center;font-size:22px;font-weight:900;box-shadow:0 0 0 1px #000,0 0 22px rgba(212,169,44,.35)}
+.brand small{display:block;font-family:var(--sans);font-weight:600;color:var(--gold);font-size:10px;letter-spacing:3px}
+.nav-links{display:flex;gap:22px;align-items:center;font-size:14px;font-weight:600;letter-spacing:.4px}
+.nav-links a{text-decoration:none;color:var(--muted)}
+.nav-links a:hover{color:var(--gold-hi)}
+.btn{display:inline-block;background:linear-gradient(180deg,var(--gold-hi),var(--gold));color:#171204;border:0;padding:13px 28px;border-radius:4px;font-weight:800;cursor:pointer;text-decoration:none;font-size:14px;letter-spacing:1.5px;text-transform:uppercase;transition:.2s;font-family:var(--sans)}
+.btn:hover{filter:brightness(1.08);transform:translateY(-1px)}
+.btn-outline{background:transparent;color:var(--cream);border:1px solid var(--line-gold)}
+.btn-outline:hover{border-color:var(--gold);color:var(--gold-hi)}
+.menu-btn{display:none;background:none;border:1px solid var(--line);border-radius:8px;padding:8px 12px;font-size:18px;color:var(--cream)}
 /* HERO */
-.hero{position:relative;overflow:hidden;background:
-  radial-gradient(800px 400px at 80% 10%, rgba(230,46,46,.25), transparent),
-  radial-gradient(600px 400px at 10% 90%, rgba(255,201,71,.12), transparent),
-  linear-gradient(180deg,#17171b 0%, #0c0c0e 100%);
-  padding:70px 0 40px;border-bottom:1px solid var(--line)}
-.hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:36px;align-items:center}
-.eyebrow{display:inline-flex;align-items:center;gap:8px;background:#1e1e24;border:1px solid var(--line);padding:7px 14px;border-radius:999px;font-size:13px;color:var(--gold);font-weight:700;letter-spacing:.3px}
-h1{font-size:clamp(36px,6vw,60px);line-height:1.02;margin:16px 0 12px;font-weight:900;text-transform:uppercase}
-h1 span{color:var(--red)}
-h1 .gold{color:var(--gold)}
-.lead{color:var(--muted);font-size:18px;margin:0 0 22px;max-width:520px}
+.hero{position:relative;overflow:hidden;padding:84px 0 64px;border-bottom:1px solid var(--line);
+  background:radial-gradient(900px 480px at 85% 5%,rgba(212,169,44,.14),transparent 60%),linear-gradient(180deg,#131009 0%,#0a0908 100%)}
+.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:12px;font-weight:700;letter-spacing:3px;color:var(--gold);text-transform:uppercase}
+.eyebrow::before{content:"";width:34px;height:1px;background:var(--gold);display:inline-block}
+h1{font-family:var(--serif);font-weight:900;font-size:clamp(42px,6.4vw,72px);line-height:1.04;margin:18px 0 16px}
+h1 em{font-style:italic;color:var(--gold-hi)}
+.lead{color:var(--muted);font-size:17.5px;margin:0 0 26px;max-width:520px}
 .hero-cta{display:flex;gap:12px;flex-wrap:wrap}
-.hero-stats{display:flex;gap:28px;margin-top:26px;flex-wrap:wrap}
-.hstat strong{font-size:28px;display:block;line-height:1}
-.hstat span{font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
-.hero-card{background:linear-gradient(180deg,#202027,#141417);border:1px solid var(--line);border-radius:20px;padding:24px;box-shadow:0 20px 60px rgba(0,0,0,.5)}
-.hero-card h3{margin:0 0 6px;font-size:20px}
-.badge{display:inline-block;background:rgba(230,46,46,.15);color:#ff7b7b;font-weight:800;font-size:12px;padding:5px 12px;border-radius:999px;border:1px solid rgba(230,46,46,.3);letter-spacing:1px}
-.info-row{display:flex;justify-content:space-between;gap:12px;padding:11px 0;border-bottom:1px dashed var(--line);font-size:15px}
-.info-row:last-child{border:0}
-.free-trial{background:linear-gradient(135deg,var(--gold),#ff8a00);color:#111;border-radius:12px;padding:14px;text-align:center;font-weight:900;margin:14px 0}
+.hero-stats{display:flex;gap:0;margin-top:34px;border-top:1px solid var(--line);flex-wrap:wrap}
+.hstat{padding:16px 28px 4px 0;margin-right:28px;border-right:1px solid var(--line)}
+.hstat:last-child{border-right:0}
+.hstat strong{font-family:var(--serif);font-size:30px;display:block;line-height:1;color:var(--gold-hi)}
+.hstat span{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px}
+.hero-frame{position:relative}
+.hero-frame img{width:100%;aspect-ratio:4/4.7;object-fit:cover;border-radius:6px;display:block;filter:saturate(.92) contrast(1.05)}
+.hero-frame::after{content:"";position:absolute;inset:14px -14px -14px 14px;border:1px solid var(--gold);border-radius:6px;z-index:-1;opacity:.7}
+.hero-frame figcaption{margin-top:18px;font-size:13px;color:var(--muted);letter-spacing:.5px;text-align:center}
+.hero-frame figcaption strong{color:var(--gold)}
+/* MARQUEE */
+.marquee{overflow:hidden;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:#0d0b09;padding:14px 0;white-space:nowrap}
+.marquee-track{display:inline-flex;gap:0;animation:scroll 26s linear infinite}
+.marquee span{font-family:var(--serif);font-style:italic;font-size:19px;color:var(--gold);padding:0 26px;letter-spacing:1px}
+.marquee span i{font-style:normal;color:#4a4132;padding-right:26px}
+@keyframes scroll{to{transform:translateX(-50%)}}
 /* SECTIONS */
-section{padding:56px 0}
-.kicker{color:var(--red);font-weight:800;letter-spacing:3px;font-size:13px;text-transform:uppercase}
-.section-title{font-size:clamp(26px,4vw,38px);margin:6px 0 8px;font-weight:900;text-transform:uppercase;line-height:1.1}
-.section-sub{color:var(--muted);margin:0 0 26px;max-width:640px}
-.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:22px;transition:.2s}
-.card:hover{border-color:#3f3f4d;transform:translateY(-2px)}
-.card h3{margin:10px 0 6px;font-size:19px}
+section{padding:72px 0}
+.kicker{display:flex;align-items:center;gap:10px;color:var(--gold);font-weight:700;letter-spacing:3.5px;font-size:12px;text-transform:uppercase;margin-bottom:10px}
+.kicker::before{content:"";width:34px;height:1px;background:var(--gold);display:inline-block}
+.section-title{font-family:var(--serif);font-weight:800;font-size:clamp(30px,4.2vw,46px);margin:0 0 10px;line-height:1.12}
+.section-title em{font-style:italic;color:var(--gold-hi)}
+.section-sub{color:var(--muted);margin:0 0 30px;max-width:640px;font-size:16.5px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:26px;align-items:start}
+.card{background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--line);border-radius:var(--radius);padding:26px;transition:.25s;position:relative}
+.card:hover{border-color:var(--line-gold);transform:translateY(-3px)}
+.card h3{margin:12px 0 8px;font-size:20px;font-family:var(--serif);font-weight:700}
 .card p{margin:0;color:var(--muted);font-size:15px}
-.card .price{font-size:26px;font-weight:900;margin:10px 0}
-.icon{font-size:34px}
-.tag{font-size:12px;font-weight:800;letter-spacing:1px;padding:4px 10px;border-radius:999px;background:#26262e;color:var(--gold);border:1px solid var(--line)}
-ul.check{list-style:none;padding:0;margin:14px 0}
-ul.check li{padding-left:30px;position:relative;margin:9px 0;color:#d6d6de;font-size:15px}
-ul.check li::before{content:"✓";position:absolute;left:0;top:1px;color:#fff;background:var(--green);width:20px;height:20px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:900}
+.prog-num{font-family:var(--serif);font-style:italic;font-size:15px;color:var(--gold);letter-spacing:2px}
+.card .go{display:inline-block;margin-top:14px;color:var(--gold-hi);font-weight:700;font-size:14px;letter-spacing:1px;text-decoration:none}
+.card .go:hover{text-decoration:underline}
+ul.check{list-style:none;padding:0;margin:16px 0 0}
+ul.check li{padding-left:30px;position:relative;margin:10px 0;color:#d8cfbc;font-size:15px}
+ul.check li::before{content:"✓";position:absolute;left:0;top:1px;color:#141005;background:linear-gradient(180deg,var(--gold-hi),var(--gold));width:20px;height:20px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:900}
 /* ABOUT */
-.about-img{width:100%;border-radius:12px;border:1px solid var(--line);display:block}
-.coach-role{color:var(--red);font-weight:800;font-size:13px;letter-spacing:1px;text-transform:uppercase}
+.about-photo{border-radius:6px;overflow:hidden;border:1px solid var(--line-gold)}
+.about-photo img{width:100%;display:block;aspect-ratio:4/5;object-fit:cover;filter:saturate(.92) contrast(1.05)}
+.cred{display:flex;gap:14px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:10px;padding:16px 18px;margin:12px 0}
+.cred strong{display:block;color:var(--cream)}
+.cred p{margin:2px 0 0;color:var(--muted);font-size:14.5px}
 /* TESTIMONIALS */
-.testi{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:22px;display:none}
+.testi{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:26px;display:none}
 .testi.active{display:block;animation:fade .4s}
+.testi h3{font-family:var(--serif);font-size:22px;margin:10px 0 8px}
 @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-.stars{color:var(--gold);font-weight:900;letter-spacing:2px}
-.dots{display:flex;gap:8px;margin-top:14px}
-.dot{width:10px;height:10px;border-radius:50%;background:#3a3a44;cursor:pointer;border:0}
-.dot.active{background:var(--red)}
-/* GALLERY */
-.gal{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-.gal div{aspect-ratio:4/3;border-radius:12px;display:grid;place-items:center;font-size:48px;border:1px solid var(--line)}
-.gal img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:12px;border:1px solid var(--line);display:block}
-.gal-cta{display:flex!important;flex-direction:column;gap:6px;background:linear-gradient(135deg,#7f1d1d,#b91c1c);color:#fff!important;text-align:center;font-weight:900;font-size:16px;text-decoration:none;line-height:1.4}
-.hero-img{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:12px;border:1px solid var(--line);margin-bottom:12px;display:block}
-.g-badge{display:flex;align-items:center;gap:12px;background:#15151a;border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin-bottom:18px;flex-wrap:wrap}
-.g-badge .g-logo{width:36px;height:36px;border-radius:50%;background:#1877F2;color:#fff;display:grid;place-items:center;font-weight:900;font-size:20px}
-.gal a{position:relative;display:block}
-.views{position:absolute;left:8px;bottom:8px;background:rgba(0,0,0,.72);color:#fff;font-size:12px;font-weight:800;padding:3px 10px;border-radius:999px}
-.gal .vid{position:relative}
-.gal.vids video{width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:12px;border:1px solid var(--line);background:#000;display:block}
+.stars{color:var(--gold);font-weight:900;letter-spacing:3px}
+.dots{display:flex;gap:8px;margin-top:16px}
+.dot{width:10px;height:10px;border-radius:50%;background:#3a3122;cursor:pointer;border:0}
+.dot.active{background:var(--gold)}
+/* GALLERY STRIP */
+.strip{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.strip img{width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:8px;border:1px solid var(--line);display:block;filter:saturate(.9)}
+.strip img:hover{border-color:var(--gold)}
+.quote{border-left:3px solid var(--gold);padding:6px 0 6px 22px;margin:0 0 30px}
+.quote p{font-family:var(--serif);font-style:italic;font-size:clamp(19px,2.6vw,25px);line-height:1.5;margin:0;color:var(--cream)}
+.quote cite{display:block;margin-top:10px;font-style:normal;font-family:var(--sans);font-size:13px;color:var(--muted);letter-spacing:.5px}
+.quote cite a{color:var(--gold)}
+/* REELS */
 .carousel{max-width:400px;margin:0 auto}
 .carousel .stage{position:relative}
-.carousel video{width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:16px;border:1px solid var(--line);background:#000;display:block}
-.car-nav{display:flex;align-items:center;justify-content:space-between;margin-top:12px}
-.car-nav button{background:#1e1e24;color:#fff;border:1px solid var(--line);border-radius:999px;padding:10px 20px;font-weight:800;cursor:pointer;font-size:14px}
-.car-nav button:hover{border-color:var(--red)}
+.carousel video{width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:12px;border:1px solid var(--line-gold);background:#000;display:block}
+.car-nav{display:flex;align-items:center;justify-content:space-between;margin-top:14px}
+.car-nav button{background:transparent;color:var(--cream);border:1px solid var(--line-gold);border-radius:999px;padding:10px 22px;font-weight:700;cursor:pointer;font-size:13px;letter-spacing:1.5px;text-transform:uppercase}
+.car-nav button:hover{border-color:var(--gold);color:var(--gold-hi)}
+.views{position:absolute;left:10px;bottom:10px;background:rgba(0,0,0,.72);color:#fff;font-size:12px;font-weight:800;padding:4px 12px;border-radius:999px}
 /* BMI */
-.bmi-box{background:linear-gradient(180deg,#1d1d24,#131318);border:1px solid var(--line);border-radius:var(--radius);padding:24px}
-label{display:block;font-weight:700;font-size:14px;margin:14px 0 6px;color:#e8e8ef}
-input,select,textarea{width:100%;padding:13px;border:1px solid #34343f;border-radius:10px;font-size:15px;font-family:inherit;background:#0f0f12;color:#fff}
-input:focus,select:focus,textarea:focus{outline:2px solid var(--red);border-color:var(--red)}
+.bmi-box{background:linear-gradient(180deg,#171309,#100d09);border:1px solid var(--line-gold);border-radius:var(--radius);padding:26px}
+label{display:block;font-weight:600;font-size:13px;letter-spacing:.5px;margin:14px 0 6px;color:#d8cfbc}
+input,select,textarea{width:100%;padding:13px;border:1px solid #38301d;border-radius:8px;font-size:15px;font-family:inherit;background:#0c0a08;color:var(--cream)}
+input:focus,select:focus,textarea:focus{outline:1px solid var(--gold);border-color:var(--gold)}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .hint{font-size:13px;color:var(--muted)}
-.error{color:#ff8f8f;font-size:13px;margin-top:4px;display:none}
-.bmi-result{margin-top:14px;background:#0f0f12;border:1px dashed var(--gold);border-radius:12px;padding:14px;text-align:center}
+.error{color:#ff9c9c;font-size:13px;margin-top:4px;display:none}
+.bmi-result{margin-top:14px;background:#0c0a08;border:1px dashed var(--gold);border-radius:10px;padding:16px;text-align:center}
 /* FORM */
-form.booking{background:#15151a;border:1px solid var(--line);border-radius:var(--radius);padding:24px}
-.booking-wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:20px}
-.side-box{background:linear-gradient(135deg,#7f1d1d,#b91c1c);border-radius:var(--radius);padding:24px;color:#fff}
-.side-box h3{margin-top:0}
-.side-box a{color:var(--gold)}
-details{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:15px 18px;margin:10px 0}
-details summary{cursor:pointer;font-weight:700}
+form.booking{background:#12100c;border:1px solid var(--line-gold);border-radius:var(--radius);padding:28px}
+.booking-wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:22px;align-items:start}
+.side-box{background:linear-gradient(135deg,#241b08,#171105);border:1px solid var(--line-gold);border-radius:var(--radius);padding:26px;color:var(--cream)}
+.side-box h3{margin-top:0;font-family:var(--serif);font-size:22px}
+.side-box a{color:var(--gold-hi)}
+details{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 20px;margin:12px 0}
+details summary{cursor:pointer;font-weight:600;font-family:var(--serif);font-size:18px}
+details summary:hover{color:var(--gold-hi)}
 details p{color:var(--muted)}
-footer{background:#08080a;color:#8e8e99;padding:36px 0;border-top:1px solid var(--line)}
-footer a{color:#fff;text-decoration:none}
-.float-cta{position:fixed;right:18px;bottom:18px;background:var(--red);color:#fff;border-radius:999px;padding:15px 22px;font-weight:900;text-decoration:none;box-shadow:0 8px 30px rgba(230,46,46,.5);z-index:60}
-.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);place-items:center;padding:20px;z-index:100}
+footer{background:#070605;color:#8a8071;padding:40px 0;border-top:1px solid var(--line)}
+footer a{color:var(--cream);text-decoration:none}
+footer a:hover{color:var(--gold-hi)}
+.float-cta{position:fixed;right:18px;bottom:18px;background:linear-gradient(180deg,var(--gold-hi),var(--gold));color:#171204;border-radius:999px;padding:15px 24px;font-weight:800;text-decoration:none;font-size:14px;letter-spacing:1px;box-shadow:0 8px 30px rgba(212,169,44,.35);z-index:60}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);place-items:center;padding:20px;z-index:100}
 .modal.show{display:grid}
-.modal-card{background:#1a1a1f;border:1px solid var(--line);border-radius:18px;max-width:480px;width:100%;padding:30px;text-align:center;color:#fff}
-.ref{background:#0f0f12;border:1px dashed var(--gold);border-radius:10px;padding:12px;font-weight:900;letter-spacing:2px;margin:14px 0;color:var(--gold);font-size:20px}
+.modal-card{background:#161310;border:1px solid var(--line-gold);border-radius:16px;max-width:480px;width:100%;padding:32px;text-align:center;color:var(--cream)}
+.ref{background:#0c0a08;border:1px dashed var(--gold);border-radius:10px;padding:12px;font-weight:800;letter-spacing:2px;margin:14px 0;color:var(--gold-hi);font-size:20px}
 .reveal{opacity:0;transform:translateY(18px);transition:.6s}
 .reveal.visible{opacity:1;transform:none}
+.final{background:radial-gradient(700px 340px at 50% 0%,rgba(212,169,44,.12),transparent),#0d0b09;border-top:1px solid var(--line);text-align:center}
 @media(max-width:900px){
-  .hero-grid,.booking-wrap,.grid-3,.grid-2,.gal{grid-template-columns:1fr}
+  .hero-grid,.booking-wrap,.grid-3,.grid-2{grid-template-columns:1fr}
+  .strip{grid-template-columns:repeat(2,1fr)}
   .nav-links{display:none}
-  .nav-links.open{display:flex;flex-direction:column;position:absolute;top:68px;right:12px;background:#1a1a1f;border:1px solid var(--line);border-radius:12px;padding:18px;box-shadow:0 10px 30px rgba(0,0,0,.5);min-width:220px}
+  .nav-links.open{display:flex;flex-direction:column;position:absolute;top:70px;right:12px;background:#161310;border:1px solid var(--line-gold);border-radius:12px;padding:18px;box-shadow:0 10px 30px rgba(0,0,0,.5);min-width:220px}
   .menu-btn{display:block}
   .row2{grid-template-columns:1fr}
 }
@@ -143,14 +160,13 @@ footer a{color:#fff;text-decoration:none}
 
 <header class="nav">
   <div class="nav-inner">
-    <div class="brand"><div class="brand-mark">🥊</div><div>COACH LANZ<small>MUAY THAI • FITNESS</small></div></div>
+    <div class="brand"><div class="brand-mark">L</div><div>COACH LANZ<small>MUAY THAI • FITNESS</small></div></div>
     <nav class="nav-links" id="navLinks">
       <a href="#about">About</a>
       <a href="#coaching">Coaching</a>
       <a href="#results">Results</a>
       <a href="#reels">Reels</a>
-      <a href="#faq">FAQ</a>
-      <a href="#consult" class="btn" style="color:#fff;padding:10px 20px">Free Consult</a>
+      <a href="#consult" class="btn" style="padding:10px 20px">Free Consult</a>
     </nav>
     <button class="menu-btn" aria-label="Menu" onclick="document.getElementById('navLinks').classList.toggle('open')">☰</button>
   </div>
@@ -159,114 +175,75 @@ footer a{color:#fff;text-decoration:none}
 <div class="hero">
   <div class="container hero-grid">
     <div>
-      <span class="eyebrow">🥊 FOUNDER & HEAD • PHILIPPINE THAI BOXING ASSOCIATION</span>
-      <h1>TRAIN WITH <span>COACH LANZ.</span> BECOME <span class="gold">UNSTOPPABLE.</span></h1>
-      <p class="lead">Kru Elizardo "Zhie" Vallega — Muay Thai coach offering 1-on-1 personalized training: striking, fat & weight loss, strength, and full nutrition coaching. In person in Imus, Cavite or online worldwide.</p>
+      <span class="eyebrow">Founder & Head • Philippine Thai Boxing Association</span>
+      <h1>Strength is built.<br/><em>Character is forged.</em></h1>
+      <p class="lead">I'm Coach Lanz — Kru Elizardo "Zhie" Vallega. I coach everyday people into strong, disciplined fighters of life through 1-on-1 Muay Thai, fat-loss, and strength training. In Imus, Cavite or online, worldwide.</p>
       <div class="hero-cta">
-        <a href="#consult" class="btn">Book FREE Consultation →</a>
-        <a href="#reels" class="btn-outline btn">Watch Training Reels</a>
+        <a href="#consult" class="btn">Book Free Consultation</a>
+        <a href="tel:+639063771210" class="btn btn-outline">0906 377 1210</a>
       </div>
       <div class="hero-stats">
         <div class="hstat"><strong>4.9★</strong><span>Community Rating</span></div>
-        <div class="hstat"><strong>450+</strong><span>Facebook Followers</span></div>
+        <div class="hstat"><strong>450+</strong><span>Followers</span></div>
         <div class="hstat"><strong>1-on-1</strong><span>Personal Coaching</span></div>
       </div>
     </div>
-    <div class="hero-card">
-      <img class="hero-img" src="photos/fb-cover.jpg" alt="Coach Lanz — Muay Thai and fitness coaching" fetchpriority="high" />
-      <span class="badge">🥇 FREE 15-MIN CONSULTATION • NO COMMITMENT</span>
-      <h3 style="margin-top:10px">Start with a plan built for you</h3>
-      <p class="hint">Beginners welcome • All ages • Online or in person</p>
-      <div class="free-trial">🎁 FREE CONSULT: goal assessment + starter plan + nutrition basics</div>
-      <div class="info-row"><span>🥊 Specialty</span><strong style="text-align:right">Muay Thai • Fat Loss • Strength</strong></div>
-      <div class="info-row"><span>📍 Base</span><strong>Imus City, Cavite + Online</strong></div>
-      <div class="info-row"><span>📞 Direct</span><strong><a href="tel:+639063771210" style="color:#fff">0906 377 1210</a></strong></div>
-      <a href="#consult" class="btn btn-gold" style="width:100%;text-align:center;margin-top:10px">Book My Free Consultation</a>
-      <p class="hint" style="text-align:center;margin-bottom:0">👇 Tell me your goal — I'll map your first 30 days</p>
-    </div>
+    <figure class="hero-frame" style="margin:0">
+      <img src="photos/fb-cover.jpg" alt="Coach Lanz — Muay Thai and fitness coaching" fetchpriority="high" />
+      <figcaption><strong>Kru Elizardo "Zhie" Vallega</strong> — Imus City, Cavite</figcaption>
+    </figure>
   </div>
 </div>
+
+<div class="marquee" aria-hidden="true"><div class="marquee-track">
+  <span>Muay Thai <i>◆</i></span><span>Fat & Weight Loss <i>◆</i></span><span>Strength & Muscle <i>◆</i></span><span>Personal Training <i>◆</i></span><span>Home Workouts <i>◆</i></span><span>Nutrition Coaching <i>◆</i></span>
+  <span>Muay Thai <i>◆</i></span><span>Fat & Weight Loss <i>◆</i></span><span>Strength & Muscle <i>◆</i></span><span>Personal Training <i>◆</i></span><span>Home Workouts <i>◆</i></span><span>Nutrition Coaching <i>◆</i></span>
+</div></div>
 
 <main class="container">
 
 <section id="about">
   <div class="grid-2">
-    <div>
-      <img class="about-img" src="photos/fb-reel5.jpg" alt="Coach Lanz training session" loading="lazy" />
-      <p class="hint" style="text-align:center">Real training footage from Coach Lanz's page.</p>
+    <div class="reveal">
+      <div class="about-photo"><img src="photos/fb-reel5.jpg" alt="Coach Lanz in a training session" loading="lazy" /></div>
     </div>
     <div>
-      <div class="kicker">Meet your coach</div>
-      <h2 class="section-title">Kru Elizardo "Zhie" Vallega</h2>
-      <div class="coach-role">Founder & Head • Philippine Thai Boxing Association</div>
-      <p class="section-sub">A certified Muay Thai instructor who builds fighters — and everyday people — from zero. From teens to seniors, his coaching blends striking technique, strength work, and practical nutrition.</p>
-      <ul class="check">
-        <li><strong>Certified authority</strong> — heads instructor certification courses for Muay Thai in Cavite</li>
-        <li><strong>Truly personalized</strong> — training + supplement guide, macros breakdown, meal prep & weekly goal updates</li>
-        <li><strong>Every level welcome</strong> — first-timers, youth athletes, adults, and active seniors</li>
-        <li><strong>Two ways to train</strong> — in person in Imus City, Cavite, or online coaching anywhere</li>
-      </ul>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
-        <a href="#consult" class="btn">Book Free Consultation</a>
-        <a href="tel:+639063771210" class="btn btn-outline">Call 0906 377 1210</a>
+      <div class="kicker">The Coach</div>
+      <h2 class="section-title">Discipline first.<br/><em>Everything else follows.</em></h2>
+      <p class="section-sub">I don't sell memberships — I build people. Teens, adults, and active seniors all train under one standard: show up, work honest, improve every week.</p>
+      <div class="cred"><div><strong>🎓 Certified authority</strong><p>Founder & Head of the Philippine Thai Boxing Association. Runs Muay Thai instructor certification courses in Cavite.</p></div></div>
+      <div class="cred"><div><strong>📋 Fully personalized</strong><p>Training + supplement guide, macros breakdown, meal prep, and weekly goal updates — built for your body and schedule.</p></div></div>
+      <div class="cred"><div><strong>🌍 Two ways to train</strong><p>In person in Imus City, Cavite — or fully online with video form reviews, wherever you are.</p></div></div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:20px">
+        <a href="#consult" class="btn">Work With Me</a>
+        <a href="#reels" class="btn btn-outline">See Me Coach</a>
       </div>
     </div>
   </div>
 </section>
 
-<section id="coaching">
-  <div class="kicker">1-on-1 coaching</div>
-  <h2 class="section-title">Programs built around you</h2>
-  <p class="section-sub">No memberships, no crowds, no guesswork. Every program is personalized with nutrition guidance and weekly check-ins.</p>
+<section id="coaching" style="padding-top:20px">
+  <div class="kicker">1-on-1 Coaching</div>
+  <h2 class="section-title">Choose your <em>battle.</em></h2>
+  <p class="section-sub">Six signature tracks. One coach. Every program includes nutrition guidance and weekly check-ins.</p>
   <div class="grid-3">
-    <div class="card reveal"><span class="tag">SIGNATURE</span><div class="icon">⭐</div><h3>Personalized Training</h3><p>The flagship program: training + supplement guide, macros breakdown, meal prep guide & weekly goal updates.</p><ul class="check"><li>Custom plan for your body & goal</li><li>Weekly progress check-ins</li><li>In person or online</li></ul></div>
-    <div class="card reveal"><div class="icon">🔥</div><h3>Fat & Weight Loss</h3><p>Sustainable fat loss through metabolic training, realistic meal prep, and accountability every week.</p><ul class="check"><li>Training + nutrition combined</li><li>Monthly measurements</li><li>Habit coaching that sticks</li></ul></div>
-    <div class="card reveal"><div class="icon">🏋️</div><h3>Strength & Muscle</h3><p>Barbell-based muscle building with proper form coaching and progressive overload tracking.</p><ul class="check"><li>Technique-first approach</li><li>Strength PR tracking</li><li>Supplement guidance</li></ul></div>
-    <div class="card reveal"><div class="icon">🇹🇭</div><h3>Muay Thai Striking</h3><p>Learn authentic striking — stance, punches, kicks, elbows, knees, pad work and conditioning.</p><ul class="check"><li>Zero experience welcome</li><li>Pad rounds + bag work</li><li>Self-defense confidence</li></ul></div>
-    <div class="card reveal"><div class="icon">🏠</div><h3>Home Workout Coaching</h3><p>No gym? No problem. Effective bodyweight & minimal-equipment programs with remote check-ins.</p><ul class="check"><li>Minimal or no equipment</li><li>Video form reviews</li><li>Train anywhere</li></ul></div>
-    <div class="card reveal" style="background:linear-gradient(180deg,#2a1212,#1a1a1f);border-color:#5a2020"><div class="icon">🎓</div><h3>Instructor Certification</h3><p>Become a certified Muay Thai instructor through the Philippine Thai Boxing Association courses.</p><br/><a href="#consult" class="btn">Ask About Certification</a></div>
+    <div class="card reveal"><div class="prog-num">— 01</div><h3>Personalized Training</h3><p>The flagship: custom training, supplement guide, macros, meal prep & weekly goal updates.</p><a class="go" href="#consult">Start here →</a></div>
+    <div class="card reveal"><div class="prog-num">— 02</div><h3>Fat & Weight Loss</h3><p>Metabolic training plus realistic nutrition and the accountability to stay the course.</p><a class="go" href="#consult">Lose it right →</a></div>
+    <div class="card reveal"><div class="prog-num">— 03</div><h3>Strength & Muscle</h3><p>Technique-first barbell coaching, progressive overload, and tracked PRs.</p><a class="go" href="#consult">Get strong →</a></div>
+    <div class="card reveal"><div class="prog-num">— 04</div><h3>Muay Thai Striking</h3><p>Authentic fundamentals — stance, punches, kicks, elbows, knees, pad work. Zero experience welcome.</p><a class="go" href="#consult">Learn to strike →</a></div>
+    <div class="card reveal"><div class="prog-num">— 05</div><h3>Home Workout Coaching</h3><p>Bodyweight and minimal-equipment programs with remote video form reviews.</p><a class="go" href="#consult">Train anywhere →</a></div>
+    <div class="card reveal" style="border-color:var(--line-gold)"><div class="prog-num">— 06</div><h3>Instructor Certification</h3><p>Become a certified Muay Thai instructor through the national association's Cavite courses.</p><a class="go" href="#consult">Get certified →</a></div>
   </div>
 </section>
 
-<section id="assess">
-  <div class="grid-2">
+<section id="results" style="padding-top:20px">
+  <div class="kicker">Proof, Not Promises</div>
+  <h2 class="section-title">Real people. <em>Real progress.</em></h2>
+  <div class="grid-2" style="margin-top:26px">
     <div>
-      <div class="kicker">Start with data</div>
-      <h2 class="section-title">Free fitness assessment</h2>
-      <p class="section-sub">Check your BMI below, then bring the result to your free consultation — Coach Lanz will build your starter plan from it.</p>
-      <ul class="check">
-        <li><strong>Know your baseline</strong> — BMI + recommended coaching track</li>
-        <li><strong>Free consultation</strong> — 15 minutes, goal mapping, zero pressure</li>
-        <li><strong>Starter plan</strong> — training + nutrition basics to begin</li>
-      </ul>
-      <a href="#consult" class="btn btn-gold">Get My Free Assessment →</a>
-    </div>
-    <div class="bmi-box">
-      <h3 style="margin:0">⚖️ BMI + Program Check</h3>
-      <p class="hint">Know your starting point. Get your recommended coaching track instantly.</p>
-      <div class="row2">
-        <div><label for="height">Height (cm)</label><input id="height" type="number" placeholder="e.g. 170" /></div>
-        <div><label for="weight">Weight (kg)</label><input id="weight" type="number" placeholder="e.g. 75" /></div>
-      </div>
-      <div class="row2">
-        <div><label for="age">Age</label><input id="age" type="number" placeholder="e.g. 28" /></div>
-        <div><label for="goal">Goal</label><select id="goal"><option>Lose fat</option><option>Build muscle</option><option>Learn Muay Thai</option><option>Get certified</option></select></div>
-      </div>
-      <button class="btn btn-gold" style="width:100%;margin-top:14px" onclick="calcBMI()">Calculate My Plan →</button>
-      <div class="bmi-result" id="bmiResult" style="display:none"></div>
-    </div>
-  </div>
-</section>
-
-<section id="results">
-  <div class="kicker">Proof, not promises</div>
-  <h2 class="section-title">Real people, real progress</h2>
-  <div class="g-badge"><div class="g-logo">f</div><div><strong>450+ followers on Facebook</strong><br/><span class="hint">Training reels up to 1.7K views · Imus City, Cavite</span></div><a href="#consult" class="btn btn-gold" style="margin-left:auto;padding:10px 20px">Start Your Story →</a></div>
-  <div class="grid-2">
-    <div>
-      <div class="testi active" id="t0"><div class="stars">★★★★★</div><h3>"Lost 12kg in 3 months — with a plan made for me"</h3><p>"Zero experience. Coach scaled everything to my level — training 3x/week plus a meal guide I could actually follow."<br/><strong>— J., 29, Online + In-person</strong></p></div>
-      <div class="testi" id="t1"><div class="stars">★★★★★</div><h3>"From shy to confident in 90 days"</h3><p>"Every detail corrected — footwork, guard, hips. Weekly check-ins kept me honest. Best coaching I've had."<br/><strong>— M., 22, Muay Thai Student</strong></p></div>
-      <div class="testi" id="t2"><div class="stars">★★★★★</div><h3>"Training that fits my life"</h3><p>"Home workout program with video reviews. No gym needed, no intimidation — just steady progress."<br/><strong>— R., 35, Home Coaching</strong></p></div>
+      <div class="testi active" id="t0"><div class="stars">★★★★★</div><h3>"12kg down in 3 months."</h3><p>"Zero experience. Coach scaled everything to my level — training plus a meal guide I could actually follow."<br/><strong>— J., 29</strong></p></div>
+      <div class="testi" id="t1"><div class="stars">★★★★★</div><h3>"Confident in 90 days."</h3><p>"Every detail corrected — footwork, guard, hips. Weekly check-ins kept me honest the whole way."<br/><strong>— M., 22</strong></p></div>
+      <div class="testi" id="t2"><div class="stars">★★★★★</div><h3>"Training that fits my life."</h3><p>"Home program with video reviews. No gym needed, no intimidation — just steady progress."<br/><strong>— R., 35</strong></p></div>
       <div class="dots">
         <button class="dot active" onclick="showTesti(0)" aria-label="Review 1"></button>
         <button class="dot" onclick="showTesti(1)" aria-label="Review 2"></button>
@@ -274,28 +251,25 @@ footer a{color:#fff;text-decoration:none}
       </div>
     </div>
     <div>
-      <div class="kicker">Training in action</div>
-      <div class="gal">
+      <div class="strip">
         <img src="photos/fb-post1.jpg" alt="Coach Lanz training session" loading="lazy" />
         <img src="photos/fb-post2.jpg" alt="Coach Lanz training session" loading="lazy" />
         <img src="photos/fb-reel1.jpg" alt="Coach Lanz workout" loading="lazy" />
         <img src="photos/fb-reel2.jpg" alt="Coach Lanz training" loading="lazy" />
         <img src="photos/fb-reel3.jpg" alt="Coach Lanz coaching" loading="lazy" />
-        <a class="gal-cta" href="#consult">📸<span>Your progress<br/>photo here!</span></a>
       </div>
-      <p class="hint">Real training footage from Coach Lanz's page.</p>
+      <p class="hint" style="margin-top:12px">Real sessions, real students — from Coach Lanz's page.</p>
     </div>
   </div>
 </section>
 
 </main>
 
-<section id="reels">
+<section id="reels" style="background:var(--bg2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
   <div class="container">
-    <div class="kicker">Watch and learn</div>
-    <h2 class="section-title">Training reels</h2>
-    <p class="section-sub">Real sessions and inspiration from Coach Lanz — tap play to watch right here, no Facebook needed.</p>
-    <div class="card" style="margin-bottom:18px;border-left:4px solid var(--gold)"><p style="margin:0;font-size:17px">"Bakal lang kinakalawang, kondisyon hindi basta sipag lang. Wala ng karera sa kondisyon — ang goal nalang kahit senior na, malakas pa din at active. 💪"</p><p class="hint" style="margin:8px 0 0">— Coach Lanz on Facebook, March 2025 · 27 reactions · <a href="https://www.facebook.com/p/Kru-Lanz-Fitness-Gym-100076342784628/" target="_blank" rel="noopener" style="color:var(--gold)">See the post →</a></p></div>
+    <div class="kicker">Watch & Learn</div>
+    <h2 class="section-title">From the <em>mats.</em></h2>
+    <div class="quote"><p>"Bakal lang kinakalawang, kondisyon hindi basta sipag lang. Wala ng karera sa kondisyon — ang goal nalang kahit senior na, malakas pa din at active. 💪"</p><cite>— Coach Lanz, March 2025 · <a href="https://www.facebook.com/p/Kru-Lanz-Fitness-Gym-100076342784628/" target="_blank" rel="noopener">Facebook</a></cite></div>
     <div class="carousel">
       <div class="stage"><video id="reelPlayer" controls playsinline preload="none" poster="photos/fb-reel2.jpg"><source id="reelSrc" src="videos/gym-reel-1.mp4" type="video/mp4" /></video><span class="views" id="reelViews">▶ 1.7K</span></div>
       <div class="car-nav"><button onclick="reelGo(-1)" aria-label="Previous video">‹ Prev</button><span class="hint" id="reelCount">1 / 4</span><button onclick="reelGo(1)" aria-label="Next video">Next ›</button></div>
@@ -306,15 +280,40 @@ footer a{color:#fff;text-decoration:none}
         <button class="dot" onclick="reelShow(3)" aria-label="Video 4"></button>
       </div>
     </div>
-    <p class="hint" style="text-align:center">More clips and updates on <a href="https://www.facebook.com/p/Kru-Lanz-Fitness-Gym-100076342784628/" target="_blank" rel="noopener" style="color:var(--gold)">Facebook →</a></p>
   </div>
 </section>
 
-<section id="consult" style="background:#101014;border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+<main class="container">
+<section id="assess">
+  <div class="grid-2">
+    <div>
+      <div class="kicker">Start With Data</div>
+      <h2 class="section-title">Know your <em>starting line.</em></h2>
+      <p class="section-sub">Check your BMI, then bring the result to your free consultation — I'll build your first 30 days from it.</p>
+      <a href="#consult" class="btn btn-outline">Skip to Booking →</a>
+    </div>
+    <div class="bmi-box">
+      <h3 style="margin:0;font-family:var(--serif);font-size:22px">⚖️ BMI + Program Check</h3>
+      <div class="row2">
+        <div><label for="height">Height (cm)</label><input id="height" type="number" placeholder="e.g. 170" /></div>
+        <div><label for="weight">Weight (kg)</label><input id="weight" type="number" placeholder="e.g. 75" /></div>
+      </div>
+      <div class="row2">
+        <div><label for="age">Age</label><input id="age" type="number" placeholder="e.g. 28" /></div>
+        <div><label for="goal">Goal</label><select id="goal"><option>Lose fat</option><option>Build muscle</option><option>Learn Muay Thai</option><option>Get certified</option></select></div>
+      </div>
+      <button class="btn" style="width:100%;margin-top:16px" onclick="calcBMI()">Calculate My Plan →</button>
+      <div class="bmi-result" id="bmiResult" style="display:none"></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<section id="consult" style="background:radial-gradient(800px 400px at 50% 0%,rgba(212,169,44,.1),transparent),#0d0b09;border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
   <div class="container">
-    <div class="kicker">Free • 15 minutes • No pressure</div>
-    <h2 class="section-title">Book your free consultation</h2>
-    <p class="section-sub">Tell me your goal in 30 seconds. I'll reply with your assessment and a starter plan — then you decide if we train together.</p>
+    <div class="kicker" style="justify-content:center">Free • 15 Minutes • No Pressure</div>
+    <h2 class="section-title" style="text-align:center">Book your <em>consultation.</em></h2>
+    <p class="section-sub" style="text-align:center;margin-left:auto;margin-right:auto">Thirty seconds now. A personal plan within a day. Then you decide.</p>
     <div class="booking-wrap">
       <form class="booking" id="consultForm" novalidate>
         <div class="row2">
@@ -333,19 +332,18 @@ footer a{color:#fff;text-decoration:none}
           <div><label for="time">Preferred Time *</label><select id="time" required><option value="">Select…</option><option>Morning (6–11 AM)</option><option>Afternoon (1–5 PM)</option><option>Evening (5–9 PM)</option></select><div class="error" id="e-time">Please choose a time.</div></div>
         </div>
         <label for="notes">Anything I should know? (optional)</label><textarea id="notes" rows="3" placeholder="e.g. current weight, injuries, schedule, experience…"></textarea>
-        <button type="submit" class="btn" style="width:100%;margin-top:14px;font-size:17px">Book FREE Consultation →</button>
-        <p class="hint" style="text-align:center">Screenshot your reference after submitting. Or message directly on <a href="https://www.facebook.com/p/Kru-Lanz-Fitness-Gym-100076342784628/" target="_blank" rel="noopener">Facebook</a>.</p>
+        <button type="submit" class="btn" style="width:100%;margin-top:16px;font-size:15px">Reserve My Free Session →</button>
       </form>
       <div>
         <div class="side-box">
-          <h3>What happens next?</h3>
-          <p>1️⃣ You get a booking reference instantly<br/>2️⃣ I reply with your assessment + starter plan<br/>3️⃣ We schedule your free 15-min call or meetup</p>
-          <hr style="border:0;border-top:1px solid rgba(255,255,255,.3);margin:14px 0"/>
-          <p><strong>📍 Train with me</strong><br/>In person — Imus City, Cavite<br/>Online — anywhere in the world</p>
-          <p><strong>📞 Direct line</strong><br/><a href="tel:+639063771210">0906 377 1210</a></p>
-          <p><strong>💬 Socials</strong><br/><a href="https://www.facebook.com/p/Kru-Lanz-Fitness-Gym-100076342784628/" target="_blank" rel="noopener">👍 Coach Lanz on Facebook</a></p>
+          <h3>What happens next</h3>
+          <p>1️⃣ Instant booking reference<br/>2️⃣ My reply with your assessment + starter plan<br/>3️⃣ Your free 15-minute call or meetup</p>
+          <hr style="border:0;border-top:1px solid rgba(212,169,44,.3);margin:16px 0"/>
+          <p><strong>📍 In person</strong><br/>Imus City, Cavite</p>
+          <p><strong>🌍 Online</strong><br/>Anywhere in the world</p>
+          <p><strong>📞 <a href="tel:+639063771210">0906 377 1210</a></strong><br/><strong>💬 <a href="https://www.facebook.com/p/Kru-Lanz-Fitness-Gym-100076342784628/" target="_blank" rel="noopener">Facebook</a></strong></p>
         </div>
-        <div class="card" style="margin-top:14px"><h3 style="margin-top:0">My consultations on this device</h3><div id="myConsults"><p class="hint">No bookings yet.</p></div></div>
+        <div class="card" style="margin-top:16px"><h3 style="margin-top:0">My bookings on this device</h3><div id="myConsults"><p class="hint">No bookings yet.</p></div></div>
       </div>
     </div>
   </div>
@@ -353,32 +351,37 @@ footer a{color:#fff;text-decoration:none}
 
 <main class="container">
 <section id="faq">
-  <h2 class="section-title">FAQ</h2>
-  <details open><summary>I'm a complete beginner. Can I train with you?</summary><p>Absolutely — most clients start from zero. Your first sessions cover basics only: movement, form, and light technique. No pressure, no sparring unless you want it.</p></details>
-  <details><summary>How does online coaching work?</summary><p>We start with your free consultation, then you get a personalized training + nutrition plan. You send form videos, I review them, and we check in weekly to adjust. Same accountability as in person.</p></details>
-  <details><summary>What does the free consultation include?</summary><p>15 minutes: goal assessment, honest evaluation of where you are, and a starter plan (training + nutrition basics). No payment, no obligation to continue.</p></details>
-  <details><summary>How fast will I see results?</summary><p>With 3x/week training plus the nutrition plan, fat-loss clients typically see 3–5kg/month; strength clients add visible muscle in 8–12 weeks. Consistency + check-ins make it happen.</p></details>
-  <details><summary>What is the Muay Thai instructor certification?</summary><p>Official instructor courses run by the Philippine Thai Boxing Association in Cavite. Message me to ask about the next batch, requirements, and slots.</p></details>
-</section>
-
-<section style="text-align:center">
-  <h2 class="section-title">Your strongest self is one message away 🥊</h2>
-  <p class="section-sub" style="margin:0 auto 20px;text-align:center">Free consultation. Personal plan. Real coach.</p>
-  <a href="#consult" class="btn" style="font-size:18px;padding:15px 36px">Book Free Consultation</a><br/><br/>
-  <span class="hint">Or call/text: <a href="tel:+639063771210">0906 377 1210</a></span>
+  <div class="kicker">Questions</div>
+  <h2 class="section-title">Before you <em>ask.</em></h2>
+  <div style="margin-top:22px">
+  <details open><summary>I'm a complete beginner. Can I train with you?</summary><p>Absolutely — most clients start from zero. First sessions cover basics only: movement, form, light technique. No pressure, no sparring unless you want it.</p></details>
+  <details><summary>How does online coaching work?</summary><p>Free consultation first, then a personalized training + nutrition plan. You send form videos, I review them, and we check in weekly. Same accountability as in person.</p></details>
+  <details><summary>What does the free consultation include?</summary><p>15 minutes: goal assessment, honest evaluation, and a starter plan with training + nutrition basics. No payment, no obligation.</p></details>
+  <details><summary>How fast will I see results?</summary><p>With 3x/week training plus the nutrition plan, fat-loss clients typically see 3–5kg/month; strength clients add visible muscle in 8–12 weeks.</p></details>
+  <details><summary>What is the instructor certification?</summary><p>Official Muay Thai instructor courses run by the Philippine Thai Boxing Association in Cavite. Message me about the next batch and slots.</p></details>
+  </div>
 </section>
 </main>
 
+<section class="final">
+  <div class="container">
+    <div class="kicker" style="justify-content:center">No Excuses</div>
+    <h2 class="section-title">Your strongest self is<br/><em>one message away.</em></h2>
+    <p class="section-sub" style="margin-left:auto;margin-right:auto;text-align:center">Free consultation. Personal plan. Real coach.</p>
+    <a href="#consult" class="btn" style="font-size:15px;padding:16px 40px">Book Free Consultation</a>
+  </div>
+</section>
+
 <footer>
   <div class="container grid-2">
-    <div><strong style="color:#fff;font-size:18px">🥊 COACH LANZ</strong><br/>Kru Elizardo "Zhie" Vallega<br/>Founder & Head, Philippine Thai Boxing Association<br/>Imus City, Cavite • <a href="tel:+639063771210">0906 377 1210</a><br/><span class="hint">© 2026 Coach Lanz. Train hard, stay humble.</span></div>
+    <div><strong style="color:var(--gold-hi);font-family:var(--serif);font-size:22px">Coach Lanz</strong><br/>Kru Elizardo "Zhie" Vallega<br/>Founder & Head, Philippine Thai Boxing Association<br/>Imus City, Cavite • <a href="tel:+639063771210">0906 377 1210</a><br/><span class="hint">© 2026 Coach Lanz. Train hard, stay humble.</span></div>
     <div style="text-align:right"><a href="#about">About</a> &nbsp;•&nbsp; <a href="#coaching">Coaching</a> &nbsp;•&nbsp; <a href="#reels">Reels</a> &nbsp;•&nbsp; <a href="#consult">Free Consult</a><p class="hint"><a href="https://www.facebook.com/p/Kru-Lanz-Fitness-Gym-100076342784628/" target="_blank" rel="noopener">Facebook</a></p></div>
   </div>
 </footer>
 
 <a class="float-cta" href="#consult">📅 Free Consult</a>
 
-<div class="modal" id="modal"><div class="modal-card"><div style="font-size:52px">🥊</div><h2 style="margin:8px 0">Consultation booked!</h2><p id="modalText" style="color:#b8b8c4"></p><div class="ref" id="modalRef">CL-000000</div><p class="hint">Screenshot this. Coach Lanz will reply with your assessment — or message the Facebook page anytime.</p><button class="btn" onclick="document.getElementById('modal').classList.remove('show')">Done</button></div></div>
+<div class="modal" id="modal"><div class="modal-card"><div style="font-size:52px">🥊</div><h2 style="margin:8px 0;font-family:var(--serif)">You're booked!</h2><p id="modalText" style="color:var(--muted)"></p><div class="ref" id="modalRef">CL-000000</div><p class="hint">Screenshot this. I'll reply with your assessment — or message me on Facebook anytime.</p><button class="btn" onclick="document.getElementById('modal').classList.remove('show')">Done</button></div></div>
 
 <script>
 const form=document.getElementById('consultForm');
@@ -392,7 +395,7 @@ function saveConsults(b){localStorage.setItem('coachlanz_consults',JSON.stringif
 function renderConsults(){
   const box=document.getElementById('myConsults');const list=getConsults();
   if(!list.length){box.innerHTML='<p class="hint">No bookings yet.</p>';return;}
-  box.innerHTML=list.map((b,i)=>`<div style="border:1px solid var(--line);border-radius:10px;padding:10px;margin:8px 0;font-size:14px;color:#ddd"><strong style="color:var(--gold)">${b.ref}</strong> • ${b.goal}<br/>${b.date} • ${b.mode} • ${b.name}<br/><button onclick="cancelConsult(${i})" style="margin-top:6px;border:1px solid #5a2020;background:#0f0f12;color:#ff8f8f;border-radius:8px;padding:6px 10px;cursor:pointer">Cancel</button></div>`).join('');
+  box.innerHTML=list.map((b,i)=>`<div style="border:1px solid var(--line);border-radius:10px;padding:10px;margin:8px 0;font-size:14px;color:#ddd"><strong style="color:var(--gold-hi)">${b.ref}</strong> • ${b.goal}<br/>${b.date} • ${b.mode} • ${b.name}<br/><button onclick="cancelConsult(${i})" style="margin-top:6px;border:1px solid #5a2020;background:#0c0a08;color:#ff9c9c;border-radius:8px;padding:6px 10px;cursor:pointer">Cancel</button></div>`).join('');
 }
 window.cancelConsult=(i)=>{const l=getConsults();l.splice(i,1);saveConsults(l);};renderConsults();
 form.addEventListener('submit',(e)=>{
@@ -434,7 +437,7 @@ function calcBMI(){
   let cat=bmi<18.5?'Underweight — time to build muscle with a strength plan':bmi<25?'Healthy — a perfect base to learn Muay Thai!':bmi<30?'Overweight — ideal starting point for fat-loss coaching':'Obese — start with guided low-impact training + nutrition';
   let rec=goal==='Lose fat'?'🔥 Recommended: Fat & Weight Loss coaching + weekly check-ins':goal==='Build muscle'?'🏋️ Recommended: Strength & Muscle coaching with form reviews':goal==='Get certified'?'🎓 Recommended: ask about the next Instructor Certification batch':'🇹🇭 Recommended: Muay Thai Striking coaching — no experience needed';
   box.style.display='block';
-  box.innerHTML=`Your BMI: <strong style="color:var(--gold);font-size:22px">${bmi.toFixed(1)}</strong><br/><span style="color:#ddd">${cat}</span><br/><br/>${rec}<br/><a href="#consult" class="btn" style="margin-top:10px;padding:10px 20px">Book Free Consultation →</a>`;
+  box.innerHTML=`Your BMI: <strong style="color:var(--gold-hi);font-size:22px">${bmi.toFixed(1)}</strong><br/><span style="color:#ddd">${cat}</span><br/><br/>${rec}<br/><a href="#consult" class="btn" style="margin-top:10px;padding:10px 20px">Book Free Consultation →</a>`;
 }
 
 // Testimonials
