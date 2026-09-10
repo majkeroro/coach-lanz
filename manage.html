@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>My Bookings — Booking Suite</title>
+<link rel="stylesheet" href="css/suite.css"/>
+</head>
+<body>
+<header class="top"><div class="nav">
+  <a class="brand" href="index.html"><div class="brand-mark" id="brandMark">B</div><div><span id="brandName">Booking Suite</span><small id="brandTag"></small></div></a>
+  <button class="mobile-menu-btn" onclick="document.querySelector('.nav-links').classList.toggle('open')">☰</button>
+  <nav class="nav-links"><a href="index.html">Home</a><a href="services.html">Services</a><a href="booking.html">Book Now</a><a href="manage.html" class="active">My Bookings</a><a href="admin.html">Admin</a></nav>
+</div></header>
+<div class="container" style="padding-bottom:40px">
+  <div class="page-head"><h1>My bookings</h1><p class="muted">Look up with booking reference (e.g. BK-XXXXX) or mobile number. Reschedule or cancel instantly.</p></div>
+  <div class="card">
+    <div style="display:flex;gap:8px;flex-wrap:wrap"><input id="q" placeholder="Enter ref or mobile…" style="flex:1;min-width:200px"/><button class="btn" onclick="search()">Find →</button></div>
+    <div id="out" style="margin-top:14px"></div>
+  </div>
+  <div class="card" style="margin-top:14px">
+    <b>📅 Need a new slot?</b> <span class="muted">Live availability, no phone tag.</span>
+    <div style="margin-top:10px"><a class="btn btn-sm" href="booking.html">Book again →</a></div>
+  </div>
+</div>
+<footer><div class="container">© <span id="yr"></span> <span class="bname"></span></div></footer>
+<script src="js/business-config.js"></script>
+<script src="js/booking-engine.js"></script>
+<script>
+function paint(){const c=BS.getConfig();document.documentElement.style.setProperty("--accent",c.business.color);brandName.textContent=c.business.name;brandTag.textContent=c.business.tagline;brandMark.textContent=(c.business.name||"B")[0];document.querySelectorAll(".bname").forEach(e=>e.textContent=c.business.name);yr.textContent=new Date().getFullYear();}
+function badge(s){return `<span class="badge b-${s}">${s}</span>`;}
+function search(){
+  const c=BS.getConfig();const qv=q.value.trim()||new URLSearchParams(location.search).get("q")||"";
+  q.value=qv;
+  if(!qv){out.innerHTML='<span class="muted">Enter a reference or mobile number above.</span>';return;}
+  const res=BS.findBookings(qv);
+  if(!res.length){out.innerHTML=`<div class="notice">No booking found for "<b>${qv}</b>". Check spelling or <a href="booking.html" style="color:var(--accent);font-weight:800">book a new slot →</a></div>`;return;}
+  out.innerHTML=res.map(b=>`
+    <div class="card" style="margin:10px 0;background:#0f1615">
+      <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap"><b>${b.serviceName}</b>${badge(b.status)}</div>
+      <div class="kv">Ref <b style="color:var(--text)">${b.ref}</b> • ${b.date} @ ${b.time} • ${b.staffName} • ${b.locationName||""}</div>
+      <div class="kv">${b.name} • ${b.phone} • Total ${c.business.currency}${b.total} • ${b.pay}</div>
+      ${b.status!=="cancelled"?`<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+        <input type="date" id="d-${b.ref}" value="${b.date}" min="${new Date().toISOString().slice(0,10)}" style="max-width:190px"/>
+        <select id="t-${b.ref}" style="max-width:150px"><option>Pick date first</option></select>
+        <button class="btn btn-sm" onclick="resched('${b.ref}')">Reschedule</button>
+        <button class="btn btn-ghost btn-sm" onclick="dl('${b.ref}')">⬇ .ics</button>
+        <button class="btn btn-danger btn-sm" onclick="cancelB('${b.ref}')">Cancel</button>
+      </div>`:`<div class="kv" style="margin-top:8px">Cancelled. <a href="booking.html" style="color:var(--accent)">Rebook →</a></div>`}
+    </div>`).join("");
+  res.forEach(b=>{
+    const d=document.getElementById("d-"+b.ref); if(!d) return;
+    const fill=()=>{const slots=BS.generateSlots(d.value,b.serviceId,b.staffId);const sel=document.getElementById("t-"+b.ref);sel.innerHTML=slots.filter(s=>s.available).map(s=>`<option>${s.time}</option>`).join("")||"<option>No slots</option>";};
+    d.onchange=fill; fill();
+  });
+}
+function resched(ref){
+  const d=document.getElementById("d-"+ref).value;const t=document.getElementById("t-"+ref).value;
+  if(!d||!t||t.includes("No")) return alert("Pick a valid date + time.");
+  const b=BS.loadBookings().find(x=>x.ref===ref);
+  const slots=BS.generateSlots(d,b.serviceId,b.staffId);
+  if(!slots.find(s=>s.time===t&&s.available)) return alert("Slot taken — pick another.");
+  BS.updateBooking(ref,{date:d,time:t,status:"confirmed"});
+  alert("Rescheduled to "+d+" @ "+t); search();
+}
+function cancelB(ref){
+  const c=BS.getConfig();
+  if(!confirm(`Cancel ${ref}? ${c.policies.cancel}`)) return;
+  BS.updateBooking(ref,{status:"cancelled"}); search();
+}
+function dl(ref){const b=BS.loadBookings().find(x=>x.ref===ref);const url=URL.createObjectURL(new Blob([BS.icsFor(b)],{type:"text/calendar"}));const a=document.createElement("a");a.href=url;a.download=ref+".ics";a.click();}
+paint();
+const pre=new URLSearchParams(location.search).get("q"); if(pre){q.value=pre;search();}
+</script>
+</body>
+</html>

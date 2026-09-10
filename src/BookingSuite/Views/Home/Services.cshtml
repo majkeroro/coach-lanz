@@ -1,0 +1,65 @@
+@{
+    ViewData["Title"] = "Services — Booking Suite";
+}
+<div class="container">
+  <div class="page-head">
+    <h1 id="hTitle">Services & Pricing</h1>
+    <p class="muted" id="hSub">Pick a service to start booking. Transparent pricing, real-time availability.</p>
+  </div>
+  <div class="toolbar">
+    <input id="q" placeholder="Search services… (e.g. massage, cleaning, consult)"/>
+    <select id="preset" title="Preview a business type">
+      <option value="fitness">Fitness / Coaching</option>
+      <option value="salon">Salon / Spa</option>
+      <option value="clinic">Clinic / Dental</option>
+      <option value="auto">Auto / Home Services</option>
+      <option value="consult">Consult / Tutor / Photo</option>
+    </select>
+    <button class="btn btn-ghost btn-sm" onclick="previewPreset()">Preview type</button>
+  </div>
+  <div class="chips" id="cats"></div>
+  <div class="svc-grid" id="grid"></div>
+  <div class="card" style="margin-bottom:40px">
+    <b>💡 Business owner?</b> <span class="muted">This whole catalog is editable — no code. Go to Admin → Services to add your own, or switch business type to reload presets.</span>
+    <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap"><a class="btn btn-sm" href="/Booking">Book now →</a><a class="btn btn-ghost btn-sm" href="/Admin">Open admin</a></div>
+  </div>
+</div>
+<footer><div class="container">© <span id="yr"></span> <span class="bname">Booking Suite</span> • <a href="/Booking">Book</a> • <a href="/Manage">My bookings</a> • <a href="/Admin">Admin</a></div></footer>
+<script>
+let activeCat="All";
+function paintBrand(){
+  const c=BS.getConfig();
+  document.documentElement.style.setProperty("--accent", c.business.color||"#c8f04a");
+  document.getElementById("brandName").textContent=c.business.name;
+  document.getElementById("brandTag").textContent=c.business.tagline;
+  document.getElementById("brandMark").textContent=(c.business.name||"B")[0];
+  document.getElementById("hTitle").textContent=c.business.name+" — Services";
+  document.getElementById("hSub").textContent=c.business.tagline+" • "+c.business.address;
+  document.getElementById("preset").value=c.business.type||"fitness";
+  document.querySelectorAll(".bname").forEach(e=>e.textContent=c.business.name);
+  document.getElementById("yr").textContent=new Date().getFullYear();
+}
+function render(){
+  const c=BS.getConfig(); const q=(document.getElementById("q").value||"").toLowerCase();
+  const cats=["All",...(c.categories||[])];
+  document.getElementById("cats").innerHTML=cats.map(k=>`<button class="chip ${k===activeCat?'on':''}" onclick="setCat('${k}')">${k}</button>`).join("");
+  const list=(c.services||[]).filter(s=>(activeCat==="All"||s.category===activeCat)&&(s.name+" "+(s.desc||"")).toLowerCase().includes(q));
+  document.getElementById("grid").innerHTML=list.length?list.map(s=>`
+    <div class="card svc"><div class="icon">${s.icon||"📅"}</div>
+      <h3>${s.name}</h3><p>${s.desc||""}</p>
+      <div class="meta"><span class="pill hot">${c.business.currency}${s.price}</span><span class="pill">⏱ ${s.duration} min</span><span class="pill">${s.category||""}</span></div>
+      <div class="row"><a class="btn btn-sm" href="/Booking?service=${s.id}">Book →</a><button class="btn btn-ghost btn-sm" onclick="quick('${s.id}')">Details</button></div>
+    </div>`).join(""):`<div class="card">No services found. <a href="/Admin" style="color:var(--accent);font-weight:800">Add one in Admin →</a></div>`;
+}
+function setCat(k){activeCat=k;render();}
+function quick(id){const c=BS.getConfig();const s=c.services.find(x=>x.id===id);alert(`${s.icon} ${s.name}\n\n${s.desc}\n\n${s.duration} min • ${c.business.currency}${s.price}\nCategory: ${s.category}`);}
+function previewPreset(){
+  const v=document.getElementById("preset").value;const p=window.BOOKING_PRESETS[v];if(!p)return;
+  if(!confirm(`Preview as "${p.label}" on THIS device only? (Bookings stay. To apply for everyone, use Admin → Setup.)`))return;
+  // Local-only preview: does not touch the server catalog.
+  BS.local.saveOverride({business:{...BS.getConfig().business,type:v,name:p.business.name,tagline:p.business.tagline,color:p.business.color},services:p.services,categories:p.categories});
+  activeCat="All";paintBrand();render();
+}
+document.getElementById("q").addEventListener("input",render);
+paintBrand();render();
+</script>

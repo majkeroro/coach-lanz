@@ -1,0 +1,21 @@
+# .NET build outputs
+[Bb]in/
+[Oo]bj/
+out/
+publish/
+.vs/
+*.user
+*.suo
+
+# SQLite databases (local dev + prod files — never commit)
+*.db
+*.db-wal
+*.db-shm
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+
+# Publish profiles / secrets
+**/Properties/PublishProfiles/*.pubxml.user
+appsettings.Production.json
+*.pfx

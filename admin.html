@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Admin — Booking Suite</title>
+<link rel="stylesheet" href="css/suite.css"/>
+<style>.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:14px 0}.stat{background:#0f1615;border:1px solid var(--line);border-radius:14px;padding:16px;text-align:center}.stat b{font-size:26px;color:var(--accent);display:block}@media(max-width:900px){.stat-grid{grid-template-columns:1fr 1fr}}</style>
+</head>
+<body>
+<header class="top"><div class="nav">
+  <a class="brand" href="index.html"><div class="brand-mark" id="brandMark">B</div><div><span id="brandName">Admin</span><small>business dashboard</small></div></a>
+  <button class="mobile-menu-btn" onclick="document.querySelector('.nav-links').classList.toggle('open')">☰</button>
+  <nav class="nav-links"><a href="index.html">Home</a><a href="services.html">Services</a><a href="booking.html">Book Now</a><a href="manage.html">My Bookings</a><a href="admin.html" class="active">Admin</a></nav>
+</div></header>
+<div class="container" style="padding-bottom:50px">
+  <div class="page-head"><h1>Business dashboard</h1><p class="muted">Today's schedule, bookings, services, staff, hours & settings — everything in one place.</p></div>
+
+  <div id="lock" class="card" style="max-width:440px;margin:20px auto;text-align:center">
+    <h3>🔒 Admin login <span class="muted" style="font-weight:400">(demo)</span></h3>
+    <p class="muted" style="font-size:14px">Default password: <b>admin123</b>. For a real business, connect this to your backend/auth.</p>
+    <input id="pw" type="password" placeholder="Enter admin password"/>
+    <button class="btn" style="width:100%;margin-top:10px" onclick="unlock()">Unlock dashboard →</button>
+  </div>
+
+  <div id="dash" style="display:none">
+    <div class="stat-grid" id="stats"></div>
+    <div class="tabs" id="tabs"></div>
+    <div id="pane"></div>
+  </div>
+</div>
+<footer><div class="container">© <span id="yr"></span> Booking Suite Admin</div></footer>
+<script src="js/business-config.js"></script>
+<script src="js/booking-engine.js"></script>
+<script>
+let TAB="today";
+const TABS=[["today","📅 Today"],["bookings","🧾 Bookings"],["services","💈 Services"],["staff","👥 Staff"],["hours","⏰ Hours & Blocks"],["setup","⚙️ Setup"]];
+function paint(){const c=BS.getConfig();document.documentElement.style.setProperty("--accent",c.business.color);brandName.textContent=c.business.name;brandMark.textContent=(c.business.name||"B")[0];yr.textContent=new Date().getFullYear();}
+function unlock(){
+  if(pw.value!=="admin123"&&pw.value!==localStorage.getItem("bs_pw")) return alert("Wrong password. Hint: admin123");
+  lock.style.display="none";dash.style.display="block";render();
+}
+function render(){
+  paint();
+  const c=BS.getConfig();const st=BS.stats();
+  stats.innerHTML=`<div class="stat"><b>${st.today}</b><span class="muted">today</span></div><div class="stat"><b>${st.total}</b><span class="muted">total bookings</span></div><div class="stat"><b>${c.business.currency}${st.revenue.toLocaleString()}</b><span class="muted">revenue (all)</span></div><div class="stat"><b>${c.services.length}</b><span class="muted">services</span></div>`;
+  tabs.innerHTML=TABS.map(([id,l])=>`<button class="tab ${TAB===id?'on':''}" onclick="TAB='${id}';render()">${l}</button>`).join("");
+  ({today:renderToday,bookings:renderBookings,services:renderServices,staff:renderStaff,hours:renderHours,setup:renderSetup})[TAB]();
+}
+function badge(s){return `<span class="badge b-${s}">${s}</span>`;}
+function rowActions(b){
+  return `<select onchange="setStatus('${b.ref}',this.value)">${["pending","confirmed","completed","cancelled"].map(s=>`<option ${b.status===s?'selected':''}>${s}</option>`).join("")}</select>
+  <button class="btn btn-ghost btn-sm" onclick="delB('${b.ref}')">Delete</button>`;
+}
+function renderToday(){
+  const c=BS.getConfig();const st=BS.stats();
+  const todayStr=new Date().toISOString().slice(0,10);
+  pane.innerHTML=`<div class="card"><b>Today — ${todayStr}</b> <span class="muted">(${st.today} appts)</span>
+  <div style="overflow:auto;margin-top:10px"><table class="tbl"><tr><th>Time</th><th>Customer</th><th>Service</th><th>Staff</th><th>Total</th><th>Status</th><th></th></tr>
+  ${BS.loadBookings().filter(b=>b.date===todayStr&&b.status!=="cancelled").sort((a,b)=>a.time.localeCompare(b.time)).map(b=>`<tr><td><b>${b.time}</b></td><td>${b.name}<br><span class="muted">${b.phone}</span></td><td>${b.serviceName}</td><td>${b.staffName}</td><td>${c.business.currency}${b.total}</td><td>${badge(b.status)}</td><td>${rowActions(b)}</td></tr>`).join("")||'<tr><td colspan="7" class="muted">No appointments today. <a href="booking.html">+ New booking</a></td></tr>'}
+  </table></div><div style="margin-top:10px;display:flex;gap:8px"><a class="btn btn-sm" href="booking.html">+ New booking</a><button class="btn btn-ghost btn-sm" onclick="exportCSV()">⬇ Export CSV</button></div></div>
+  <div class="card" style="margin-top:12px"><b>⏭ Upcoming</b>${st.upcoming.map(b=>`<div class="summary-row"><span>${b.date} ${b.time} — ${b.serviceName} (${b.name})</span><span>${badge(b.status)}</span></div>`).join("")||'<p class="muted">Nothing upcoming.</p>'}</div>`;
+}
+function renderBookings(){
+  const c=BS.getConfig();
+  pane.innerHTML=`<div class="card"><div class="toolbar"><input id="bq" placeholder="Search ref / name / phone…" oninput="renderBookings()"/><button class="btn btn-ghost btn-sm" onclick="exportCSV()">⬇ CSV</button></div>
+  <div style="overflow:auto"><table class="tbl"><tr><th>Ref</th><th>When</th><th>Customer</th><th>Service</th><th>Total</th><th>Status</th><th></th></tr>
+  ${BS.loadBookings().filter(b=>{const qv=(document.getElementById("bq")?.value||"").toLowerCase();return !qv||(b.ref+b.name+b.phone+b.serviceName).toLowerCase().includes(qv);}).sort((a,b)=>(b.date+b.time).localeCompare(a.date+a.time)).map(b=>`<tr><td><b>${b.ref}</b></td><td>${b.date}<br>${b.time}</td><td>${b.name}<br><span class="muted">${b.phone}</span></td><td>${b.serviceName}<br><span class="muted">${b.staffName}</span></td><td>${c.business.currency}${b.total}</td><td>${badge(b.status)}</td><td>${rowActions(b)}</td></tr>`).join("")}
+  </table></div></div>`;
+  const bq=document.getElementById("bq"); if(bq){bq.focus();bq.setSelectionRange(bq.value.length,bq.value.length);}
+}
+function renderServices(){
+  const c=BS.getConfig();
+  pane.innerHTML=`<div class="card"><b>Services (${c.services.length})</b><p class="muted">Add / edit / delete. Changes go live instantly on Services + Booking pages.</p>
+  <div class="grid-2"><div><label>Name</label><input id="sName" placeholder="e.g. Haircut"/></div><div><label>Category</label><input id="sCat" placeholder="e.g. Hair"/></div></div>
+  <div class="grid-4"><div><label>Price (${c.business.currency})</label><input id="sPrice" type="number" value="500"/></div><div><label>Duration (min)</label><input id="sDur" type="number" value="45"/></div><div><label>Icon</label><input id="sIcon" value="✂️"/></div><div><label>&nbsp;</label><button class="btn" onclick="addService()">+ Add</button></div></div>
+  <div style="margin-top:12px"><table class="tbl"><tr><th></th><th>Service</th><th>Cat</th><th>Dur</th><th>Price</th><th></th></tr>
+  ${c.services.map(s=>`<tr><td>${s.icon||""}</td><td><b>${s.name}</b><br><span class="muted">${s.desc||""}</span></td><td>${s.category||""}</td><td>${s.duration}m</td><td>${c.business.currency}${s.price}</td><td><button class="btn btn-ghost btn-sm" onclick="delService('${s.id}')">Delete</button></td></tr>`).join("")}</table></div></div>`;
+}
+function renderStaff(){
+  const c=BS.getConfig();
+  pane.innerHTML=`<div class="card"><b>Staff (${c.staff.length})</b>
+  <div class="grid-4"><div><label>Name</label><input id="tName" placeholder="e.g. Ana"/></div><div><label>Role</label><input id="tRole" placeholder="e.g. Stylist"/></div><div><label>Avatar emoji</label><input id="tAv" value="👩‍🎨"/></div><div><label>&nbsp;</label><button class="btn" onclick="addStaff()">+ Add</button></div></div>
+  <table class="tbl" style="margin-top:12px"><tr><th></th><th>Name</th><th>Role</th><th>Services</th><th></th></tr>
+  ${c.staff.map(s=>`<tr><td style="font-size:22px">${s.avatar||"👤"}</td><td><b>${s.name}</b></td><td>${s.role||""}</td><td class="muted">${s.services==="all"?"all":(s.services||[]).join(", ")}</td><td>${s.id!=="any"?`<button class="btn btn-ghost btn-sm" onclick="delStaff('${s.id}')">Delete</button>`:"<span class='muted'>system</span>"}</td></tr>`).join("")}</table></div>`;
+}
+function renderHours(){
+  const c=BS.getConfig();const days=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+  pane.innerHTML=`<div class="grid-2"><div class="card"><b>⏰ Weekly hours</b><p class="muted">Uncheck = closed. Break = no bookings.</p>
+  ${days.map((d,i)=>{const h=c.hours[String(i)];return `<div style="display:flex;gap:6px;align-items:center;margin:6px 0;font-size:14px"><input type="checkbox" style="width:auto" ${h?'checked':''} onchange="toggleDay(${i},this.checked)"/><b style="width:36px">${d}</b><input type="time" value="${h?.open||'09:00'}" onchange="setHour(${i},'open',this.value)" style="padding:6px"/><span>–</span><input type="time" value="${h?.close||'18:00'}" onchange="setHour(${i},'close',this.value)" style="padding:6px"/></div>`;}).join("")}
+  <div class="grid-2"><div><label>Slot every (min)</label><input type="number" value="${c.business.slotInterval}" onchange="setBiz('slotInterval',+this.value)"/></div><div><label>Buffer (min)</label><input type="number" value="${c.business.buffer}" onchange="setBiz('buffer',+this.value)"/></div></div>
+  </div><div class="card"><b>🚫 Blocked dates</b><p class="muted">Holidays, vacations — no bookings.</p>
+  <div style="display:flex;gap:8px"><input type="date" id="blk"/><button class="btn btn-sm" onclick="addBlock()">+ Block</button></div>
+  <div class="chips" style="margin-top:10px">${(c.blockedDates||[]).map(d=>`<button class="chip" onclick="delBlock('${d}')">${d} ✕</button>`).join("")||'<span class="muted">None blocked.</span>'}</div>
+  <label style="margin-top:14px">Free-cancel window (hours)</label><input type="number" value="${c.business.cancelHours}" onchange="setBiz('cancelHours',+this.value)"/>
+  </div></div>`;
+}
+function renderSetup(){
+  const c=BS.getConfig();
+  pane.innerHTML=`<div class="grid-2"><div class="card"><b>⚙️ Business profile</b>
+  <label>Business name</label><input id="bizName" value="${c.business.name}"/>
+  <label>Tagline</label><input id="bizTag" value="${c.business.tagline}"/>
+  <label>Phone</label><input id="bizPhone" value="${c.business.phone}"/>
+  <label>Address</label><input id="bizAddr" value="${c.business.address}"/>
+  <label>Messenger / contact link</label><input id="bizMsg" value="${c.business.messenger||""}"/>
+  <div class="grid-2"><div><label>Currency</label><input id="bizCur" value="${c.business.currency}"/></div><div><label>Brand color</label><input id="bizCol" type="color" value="${c.business.color}"/></div></div>
+  <button class="btn" style="margin-top:12px" onclick="saveBiz()">Save profile →</button></div>
+  <div class="card"><b>🏪 Business type presets</b><p class="muted">One click loads a ready-made catalog. Your bookings are kept.</p>
+  ${Object.entries(window.BOOKING_PRESETS).map(([k,p])=>`<div class="summary-row"><span><b>${p.label}</b><br><span class="muted">${p.services.length} services</span></span><button class="btn btn-ghost btn-sm" onclick="loadPreset('${k}')">Load</button></div>`).join("")}
+  <hr style="border-color:var(--line)"/><b>🧹 Data</b><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><button class="btn btn-ghost btn-sm" onclick="exportCSV()">⬇ Export CSV</button><button class="btn btn-ghost btn-sm" onclick="if(confirm('Reset demo bookings?')){localStorage.removeItem('bs_bookings_v1');render()}">Reset bookings</button><button class="btn btn-danger btn-sm" onclick="if(confirm('Reset ALL customizations?')){BS.clearOverride();render()}">Factory reset</button></div>
+  <p class="muted" style="font-size:13px">To go live: deploy this folder to GitHub Pages / Netlify, then replace localStorage with Firebase/Supabase. All logic is in <b>js/booking-engine.js</b>.</p></div></div>`;
+}
+// actions
+function setStatus(ref,v){BS.updateBooking(ref,{status:v});render();}
+function delB(ref){if(!confirm("Delete "+ref+"?"))return;BS.deleteBooking(ref);render();}
+function exportCSV(){
+  const all=BS.loadBookings();
+  const csv=["ref,date,time,service,staff,customer,phone,total,status"].concat(all.map(b=>[b.ref,b.date,b.time,`"${b.serviceName}"`,`"${b.staffName}"`,`"${b.name}"`,b.phone,b.total,b.status].join(","))).join("\n");
+  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv"}));a.download="bookings.csv";a.click();
+}
+function addService(){
+  const c=BS.getConfig();const id="s-"+Date.now().toString(36);
+  const svc={id,name:sName.value||"New service",category:sCat.value||"General",price:+sPrice.value||0,duration:+sDur.value||30,icon:sIcon.value||"📅",desc:""};
+  BS.saveOverride({services:[...c.services,svc]});render();
+}
+function delService(id){const c=BS.getConfig();BS.saveOverride({services:c.services.filter(s=>s.id!==id)});render();}
+function addStaff(){
+  const c=BS.getConfig();const id="t-"+Date.now().toString(36);
+  BS.saveOverride({staff:[...c.staff,{id,name:tName.value||"New staff",role:tRole.value||"",avatar:tAv.value||"👤",services:"all"}]});render();
+}
+function delStaff(id){const c=BS.getConfig();BS.saveOverride({staff:c.staff.filter(s=>s.id!==id)});render();}
+function toggleDay(i,on){const c=BS.getConfig();const h={...c.hours};if(on&&!h[String(i)])h[String(i)]={open:"09:00",close:"18:00",breakStart:null,breakEnd:null};if(!on)h[String(i)]=null;BS.saveOverride({hours:h});render();}
+function setHour(i,k,v){const c=BS.getConfig();const h={...c.hours};h[String(i)]={...h[String(i)],[k]:v};BS.saveOverride({hours:h});}
+function setBiz(k,v){BS.saveOverride({business:{[k]:v}});paint();}
+function addBlock(){const c=BS.getConfig();if(!blk.value)return;BS.saveOverride({blockedDates:[...(c.blockedDates||[]),blk.value]});render();}
+function delBlock(d){const c=BS.getConfig();BS.saveOverride({blockedDates:(c.blockedDates||[]).filter(x=>x!==d)});render();}
+function saveBiz(){BS.saveOverride({business:{name:bizName.value,tagline:bizTag.value,phone:bizPhone.value,address:bizAddr.value,messenger:bizMsg.value,currency:bizCur.value,color:bizCol.value}});render();alert("Saved ✓");}
+function loadPreset(k){const p=window.BOOKING_PRESETS[k];if(!confirm(`Load "${p.label}" catalog?`))return;BS.saveOverride({business:{...BS.getConfig().business,type:k,name:p.business.name,tagline:p.business.tagline,color:p.business.color},services:p.services,categories:p.categories});render();}
+paint();
+</script>
+</body>
+</html>

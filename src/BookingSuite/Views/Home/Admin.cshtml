@@ -1,0 +1,184 @@
+@{
+    ViewData["Title"] = "Admin — Booking Suite";
+}
+<style>.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:14px 0}.stat{background:#0f1615;border:1px solid var(--line);border-radius:14px;padding:16px;text-align:center}.stat b{font-size:26px;color:var(--accent);display:block}@@media(max-width:900px){.stat-grid{grid-template-columns:1fr 1fr}}</style>
+<div class="container" style="padding-bottom:50px">
+  <div class="page-head"><h1>Business dashboard</h1><p class="muted">Today's schedule, bookings, services, staff, hours & settings — everything in one place.</p></div>
+
+  <div id="lock" class="card" style="max-width:440px;margin:20px auto;text-align:center">
+    <h3>🔒 Admin login</h3>
+    <p class="muted" style="font-size:14px">Sign in to manage bookings & settings. First login: <b>admin</b> / <b>admin123</b> (you'll be asked to change it).</p>
+    <input id="uname" placeholder="Username" value="admin" autocomplete="username"/>
+    <input id="pw" type="password" placeholder="Password" autocomplete="current-password" style="margin-top:8px"/>
+    <button class="btn" style="width:100%;margin-top:10px" onclick="unlock()">Unlock dashboard →</button>
+    <div id="lockErr" class="muted" style="margin-top:8px"></div>
+  </div>
+
+  <div id="dash" style="display:none">
+    <div id="pwBanner" class="notice" style="display:none">⚠️ You're using the default password. <a href="#" onclick="TAB='setup';render();return false;" style="color:var(--accent);font-weight:800">Change it in Setup →</a></div>
+    <div class="stat-grid" id="stats"></div>
+    <div class="tabs" id="tabs"></div>
+    <div id="pane"></div>
+  </div>
+</div>
+<footer><div class="container">© <span id="yr"></span> Booking Suite Admin</div></footer>
+<script>
+let TAB="today";
+let BOOKS=[];
+const TABS=[["today","📅 Today"],["bookings","🧾 Bookings"],["services","💈 Services"],["staff","👥 Staff"],["hours","⏰ Hours & Blocks"],["setup","⚙️ Setup"]];
+function paint(){const c=BS.getConfig();document.documentElement.style.setProperty("--accent",c.business.color);brandName.textContent=c.business.name;brandMark.textContent=(c.business.name||"B")[0];yr.textContent=new Date().getFullYear();}
+async function api(path,opt){
+  const r=await fetch(path,{credentials:"same-origin",headers:{"Content-Type":"application/json"},...(opt||{})});
+  if(r.status===204) return null;
+  const d=await r.json().catch(()=>({}));
+  if(!r.ok) throw new Error(d.error||("Request failed ("+r.status+")"));
+  return d;
+}
+async function checkSession(){
+  try{
+    const me=await api("/api/admin/me");
+    lock.style.display="none";dash.style.display="block";
+    pwBanner.style.display=me.mustChangePassword?"block":"none";
+    render();
+  }catch{ lock.style.display="block";dash.style.display="none"; }
+}
+async function unlock(){
+  lockErr.textContent="Signing in…";
+  try{
+    const res=await api("/api/admin/login",{method:"POST",body:JSON.stringify({username:uname.value,password:pw.value})});
+    pw.value="";lockErr.textContent="";
+    lock.style.display="none";dash.style.display="block";
+    pwBanner.style.display=res.mustChangePassword?"block":"none";
+    render();
+  }catch(e){ lockErr.textContent=e.message; }
+}
+async function logout(){
+  await api("/api/admin/logout",{method:"POST"});
+  lock.style.display="block";dash.style.display="none";
+}
+async function render(){
+  paint();
+  const c=BS.getConfig();
+  let st={today:0,total:0,revenue:0,upcoming:[]};
+  try{
+    st=await BS.adminStats();
+    BOOKS=await BS.adminBookings();
+  }catch(e){
+    if(String(e.message).includes("401")){ lock.style.display="block";dash.style.display="none";return; }
+    pane.innerHTML=`<div class="notice">Couldn't load data: ${e.message}</div>`;return;
+  }
+  stats.innerHTML=`<div class="stat"><b>${st.today}</b><span class="muted">today</span></div><div class="stat"><b>${st.total}</b><span class="muted">total bookings</span></div><div class="stat"><b>${c.business.currency}${st.revenue.toLocaleString()}</b><span class="muted">revenue (all)</span></div><div class="stat"><b>${c.services.length}</b><span class="muted">services</span></div>`;
+  tabs.innerHTML=TABS.map(([id,l])=>`<button class="tab ${TAB===id?'on':''}" onclick="TAB='${id}';render()">${l}</button>`).join("");
+  ({today:()=>renderToday(st),bookings:renderBookings,services:renderServices,staff:renderStaff,hours:renderHours,setup:renderSetup})[TAB]();
+}
+function badge(s){return `<span class="badge b-${s}">${s}</span>`;}
+function esc(s){return String(s??"").replace(/"/g,"&quot;");}
+function rowActions(b){
+  return `<select onchange="setStatus('${b.ref}',this.value)">${["pending","confirmed","completed","cancelled"].map(s=>`<option ${b.status===s?'selected':''}>${s}</option>`).join("")}</select>
+  <select onchange="setPay('${b.ref}',this.value)" title="Payment"><option value="">Pay: ${b.payStatus}</option>${["Pending","Paid","Refunded"].map(s=>`<option>${s}</option>`).join("")}</select>
+  <button class="btn btn-ghost btn-sm" onclick="delB('${b.ref}')">Delete</button>`;
+}
+function renderToday(st){
+  const c=BS.getConfig();
+  const todayStr=new Date().toISOString().slice(0,10);
+  pane.innerHTML=`<div class="card"><b>Today — ${todayStr}</b> <span class="muted">(${st.today} appts)</span>
+  <div style="overflow:auto;margin-top:10px"><table class="tbl"><tr><th>Time</th><th>Customer</th><th>Service</th><th>Staff</th><th>Total</th><th>Status</th><th></th></tr>
+  ${BOOKS.filter(b=>b.date===todayStr&&b.status!=="cancelled").sort((a,b)=>a.time.localeCompare(b.time)).map(b=>`<tr><td><b>${b.time}</b></td><td>${esc(b.name)}<br><span class="muted">${esc(b.phone)}</span></td><td>${esc(b.serviceName)}</td><td>${esc(b.staffName)}</td><td>${c.business.currency}${b.total}</td><td>${badge(b.status)}</td><td>${rowActions(b)}</td></tr>`).join("")||'<tr><td colspan="7" class="muted">No appointments today. <a href="/Booking">+ New booking</a></td></tr>'}
+  </table></div><div style="margin-top:10px;display:flex;gap:8px"><a class="btn btn-sm" href="/Booking">+ New booking</a><button class="btn btn-ghost btn-sm" onclick="exportCSV()">⬇ Export CSV</button></div></div>
+  <div class="card" style="margin-top:12px"><b>⏭ Upcoming</b>${st.upcoming.map(b=>`<div class="summary-row"><span>${b.date} ${b.time} — ${esc(b.serviceName)} (${esc(b.name)})</span><span>${badge(b.status)}</span></div>`).join("")||'<p class="muted">Nothing upcoming.</p>'}</div>`;
+}
+function renderBookings(){
+  const c=BS.getConfig();
+  const qv=(document.getElementById("bq")?.value||"").toLowerCase();
+  const list=BOOKS.filter(b=>!qv||(b.ref+b.name+b.phone+b.serviceName).toLowerCase().includes(qv)).sort((a,b)=>(b.date+b.time).localeCompare(a.date+a.time));
+  pane.innerHTML=`<div class="card"><div class="toolbar"><input id="bq" placeholder="Search ref / name / phone…" value="${qv.replace(/"/g,"&quot;")}"/><button class="btn btn-ghost btn-sm" onclick="exportCSV()">⬇ CSV</button></div>
+  <div style="overflow:auto"><table class="tbl"><tr><th>Ref</th><th>When</th><th>Customer</th><th>Service</th><th>Total</th><th>Status</th><th></th></tr>
+  ${list.map(b=>`<tr><td><b>${b.ref}</b></td><td>${b.date}<br>${b.time}</td><td>${esc(b.name)}<br><span class="muted">${esc(b.phone)}</span></td><td>${esc(b.serviceName)}<br><span class="muted">${esc(b.staffName)}</span></td><td>${c.business.currency}${b.total}<br><span class="muted">${b.pay} • ${b.payStatus}</span></td><td>${badge(b.status)}</td><td>${rowActions(b)}</td></tr>`).join("")}
+  </table></div></div>`;
+  const bq=document.getElementById("bq"); bq.oninput=renderBookings; bq.focus(); bq.setSelectionRange(bq.value.length,bq.value.length);
+}
+function renderServices(){
+  const c=BS.getConfig();
+  pane.innerHTML=`<div class="card"><b>Services (${c.services.length})</b><p class="muted">Add / edit / delete. Changes go live instantly on Services + Booking pages.</p>
+  <div class="grid-2"><div><label>Name</label><input id="sName" placeholder="e.g. Haircut"/></div><div><label>Category</label><input id="sCat" placeholder="e.g. Hair"/></div></div>
+  <div class="grid-4"><div><label>Price (${c.business.currency})</label><input id="sPrice" type="number" value="500"/></div><div><label>Duration (min)</label><input id="sDur" type="number" value="45"/></div><div><label>Icon</label><input id="sIcon" value="✂️"/></div><div><label>&nbsp;</label><button class="btn" onclick="addService()">+ Add</button></div></div>
+  <div style="margin-top:12px"><table class="tbl"><tr><th></th><th>Service</th><th>Cat</th><th>Dur</th><th>Price</th><th></th></tr>
+  ${c.services.map(s=>`<tr><td>${s.icon||""}</td><td><b>${esc(s.name)}</b><br><span class="muted">${esc(s.desc||"")}</span></td><td>${esc(s.category||"")}</td><td>${s.duration}m</td><td>${c.business.currency}${s.price}</td><td><button class="btn btn-ghost btn-sm" onclick="delService('${s.id}')">Delete</button></td></tr>`).join("")}</table></div></div>`;
+}
+function renderStaff(){
+  const c=BS.getConfig();
+  pane.innerHTML=`<div class="card"><b>Staff (${c.staff.length})</b><p class="muted">New staff can serve all services — edit the list in code for per-service skills.</p>
+  <div class="grid-4"><div><label>Name</label><input id="tName" placeholder="e.g. Ana"/></div><div><label>Role</label><input id="tRole" placeholder="e.g. Stylist"/></div><div><label>Avatar emoji</label><input id="tAv" value="👩‍🎨"/></div><div><label>&nbsp;</label><button class="btn" onclick="addStaff()">+ Add</button></div></div>
+  <table class="tbl" style="margin-top:12px"><tr><th></th><th>Name</th><th>Role</th><th>Services</th><th></th></tr>
+  ${c.staff.map(s=>`<tr><td style="font-size:22px">${s.avatar||"👤"}</td><td><b>${esc(s.name)}</b></td><td>${esc(s.role||"")}</td><td class="muted">${s.services==="all"?"all":(s.services||[]).join(", ")}</td><td>${s.id!=="any"?`<button class="btn btn-ghost btn-sm" onclick="delStaff('${s.id}')">Delete</button>`:"<span class='muted'>system</span>"}</td></tr>`).join("")}</table></div>`;
+}
+function renderHours(){
+  const c=BS.getConfig();const days=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+  pane.innerHTML=`<div class="grid-2"><div class="card"><b>⏰ Weekly hours</b><p class="muted">Uncheck = closed. Break = no bookings.</p>
+  ${days.map((d,i)=>{const h=c.hours[String(i)];return `<div style="display:flex;gap:6px;align-items:center;margin:6px 0;font-size:14px"><input type="checkbox" style="width:auto" ${h?'checked':''} onchange="toggleDay(${i},this.checked)"/><b style="width:36px">${d}</b><input type="time" value="${h?.open||'09:00'}" onchange="setHour(${i},'open',this.value)" style="padding:6px"/><span>–</span><input type="time" value="${h?.close||'18:00'}" onchange="setHour(${i},'close',this.value)" style="padding:6px"/></div>`;}).join("")}
+  <div class="grid-2"><div><label>Slot every (min)</label><input type="number" value="${c.business.slotInterval}" onchange="setBiz('slotInterval',+this.value)"/></div><div><label>Buffer (min)</label><input type="number" value="${c.business.buffer}" onchange="setBiz('buffer',+this.value)"/></div></div>
+  </div><div class="card"><b>🚫 Blocked dates</b><p class="muted">Holidays, vacations — no bookings.</p>
+  <div style="display:flex;gap:8px"><input type="date" id="blk"/><button class="btn btn-sm" onclick="addBlock()">+ Block</button></div>
+  <div class="chips" style="margin-top:10px">${(c.blockedDates||[]).map(d=>`<button class="chip" onclick="delBlock('${d}')">${d} ✕</button>`).join("")||'<span class="muted">None blocked.</span>'}</div>
+  <label style="margin-top:14px">Free-cancel window (hours)</label><input type="number" value="${c.business.cancelHours}" onchange="setBiz('cancelHours',+this.value)"/>
+  </div></div>`;
+}
+function renderSetup(){
+  const c=BS.getConfig();
+  pane.innerHTML=`<div class="grid-2"><div class="card"><b>⚙️ Business profile</b>
+  <label>Business name</label><input id="bizName" value="${esc(c.business.name)}"/>
+  <label>Tagline</label><input id="bizTag" value="${esc(c.business.tagline)}"/>
+  <label>Phone</label><input id="bizPhone" value="${esc(c.business.phone)}"/>
+  <label>Address</label><input id="bizAddr" value="${esc(c.business.address)}"/>
+  <label>Messenger / contact link</label><input id="bizMsg" value="${esc(c.business.messenger||"")}"/>
+  <div class="grid-2"><div><label>Currency</label><input id="bizCur" value="${esc(c.business.currency)}"/></div><div><label>Brand color</label><input id="bizCol" type="color" value="${c.business.color}"/></div></div>
+  <button class="btn" style="margin-top:12px" onclick="saveBiz()">Save profile →</button>
+  <hr style="border-color:var(--line)"/><b>🔑 Change admin password</b>
+  <label>Current password</label><input id="pwCur" type="password"/>
+  <label>New password (min 8 chars)</label><input id="pwNew" type="password"/>
+  <button class="btn btn-ghost btn-sm" style="margin-top:8px" onclick="changePw()">Change password</button>
+  <div style="margin-top:10px"><button class="btn btn-ghost btn-sm" onclick="logout()">Log out</button></div></div>
+  <div class="card"><b>🏪 Business type presets</b><p class="muted">One click loads a ready-made catalog (staff reset to "First Available"). Your bookings are kept.</p>
+  ${Object.entries(window.BOOKING_PRESETS).map(([k,p])=>`<div class="summary-row"><span><b>${p.label}</b><br><span class="muted">${p.services.length} services</span></span><button class="btn btn-ghost btn-sm" onclick="loadPreset('${k}')">Load</button></div>`).join("")}
+  <hr style="border-color:var(--line)"/><b>🧹 Data</b><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><button class="btn btn-ghost btn-sm" onclick="exportCSV()">⬇ Export CSV</button></div>
+  <p class="muted" style="font-size:13px">All changes save to the server database instantly and go live on every device.</p></div></div>`;
+}
+// actions (all persist to the server)
+async function save(patch){
+  try{ await BS.saveOverride(patch); }
+  catch(e){ alert(e.message); throw e; }
+}
+async function setStatus(ref,v){ await api("/api/admin/bookings/"+ref,{method:"PATCH",body:JSON.stringify({status:v})}); render(); }
+async function setPay(ref,v){ if(!v)return; await api("/api/admin/bookings/"+ref,{method:"PATCH",body:JSON.stringify({payStatus:v})}); render(); }
+async function delB(ref){if(!confirm("Delete "+ref+"?"))return; await BS.adminDelete(ref); render();}
+function exportCSV(){ location.href="/api/admin/export.csv"; }
+async function addService(){
+  const c=BS.getConfig();const id="s-"+Date.now().toString(36);
+  const svc={id,name:sName.value||"New service",category:sCat.value||"General",price:+sPrice.value||0,duration:+sDur.value||30,icon:sIcon.value||"📅",desc:""};
+  await save({services:[...c.services,svc]});render();
+}
+async function delService(id){const c=BS.getConfig();await save({services:c.services.filter(s=>s.id!==id)});render();}
+async function addStaff(){
+  const c=BS.getConfig();const id="t-"+Date.now().toString(36);
+  await save({staff:[...c.staff,{id,name:tName.value||"New staff",role:tRole.value||"",avatar:tAv.value||"👤",services:"all"}]});render();
+}
+async function delStaff(id){const c=BS.getConfig();await save({staff:c.staff.filter(s=>s.id!==id)});render();}
+async function toggleDay(i,on){const c=BS.getConfig();const h={...c.hours};if(on&&!h[String(i)])h[String(i)]={open:"09:00",close:"18:00",breakStart:null,breakEnd:null};if(!on)h[String(i)]=null;await save({hours:h});render();}
+async function setHour(i,k,v){const c=BS.getConfig();const h={...c.hours};h[String(i)]={...h[String(i)],[k]:v};await save({hours:h});}
+async function setBiz(k,v){await save({business:{[k]:v}});paint();}
+async function addBlock(){const c=BS.getConfig();if(!blk.value)return;await save({blockedDates:[...(c.blockedDates||[]),blk.value]});render();}
+async function delBlock(d){const c=BS.getConfig();await save({blockedDates:(c.blockedDates||[]).filter(x=>x!==d)});render();}
+async function saveBiz(){await save({business:{name:bizName.value,tagline:bizTag.value,phone:bizPhone.value,address:bizAddr.value,messenger:bizMsg.value,currency:bizCur.value,color:bizCol.value}});render();alert("Saved ✓");}
+async function loadPreset(k){
+  const p=window.BOOKING_PRESETS[k];if(!confirm(`Load "${p.label}" catalog? Staff resets to First Available; bookings are kept.`))return;
+  await save({business:{...BS.getConfig().business,type:k,name:p.business.name,tagline:p.business.tagline,color:p.business.color},services:p.services,categories:p.categories,
+    staff:[{id:"any",name:"First Available",role:"Any specialist",avatar:"✨",services:"all"}]});
+  render();
+}
+async function changePw(){
+  try{ await api("/api/admin/password",{method:"POST",body:JSON.stringify({current:pwCur.value,new:pwNew.value})}); alert("Password changed ✓"); pwBanner.style.display="none"; }
+  catch(e){ alert(e.message); }
+}
+paint();
+checkSession();
+</script>

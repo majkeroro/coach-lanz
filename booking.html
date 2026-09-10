@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Book Now — Booking Suite</title>
+<link rel="stylesheet" href="css/suite.css"/>
+</head>
+<body>
+<header class="top"><div class="nav">
+  <a class="brand" href="index.html"><div class="brand-mark" id="brandMark">B</div><div><span id="brandName">Booking Suite</span><small id="brandTag"></small></div></a>
+  <button class="mobile-menu-btn" onclick="document.querySelector('.nav-links').classList.toggle('open')">☰</button>
+  <nav class="nav-links"><a href="index.html">Home</a><a href="services.html">Services</a><a href="booking.html" class="active">Book Now</a><a href="manage.html">My Bookings</a><a href="admin.html">Admin</a></nav>
+</div></header>
+<div class="container" style="padding-bottom:40px">
+  <div class="page-head"><h1>Book an appointment</h1><p class="muted" id="bizLine"></p></div>
+  <div class="steps-bar" id="bar"><div class="on"></div><div></div><div></div><div></div><div></div></div>
+
+  <div class="wizard">
+    <div>
+      <!-- STEP 1 -->
+      <div class="card step" data-step="1">
+        <h3 style="margin-top:0">1 · Choose service & add-ons</h3>
+        <label>Service</label><select id="fService"></select>
+        <div id="svcInfo" class="kv" style="margin-top:6px"></div>
+        <label>Add-ons (optional)</label><div id="addons" class="chips"></div>
+        <label>Coupon code (optional)</label>
+        <div style="display:flex;gap:8px"><input id="fCoupon" placeholder="Try WELCOME10"/><button class="btn btn-ghost btn-sm" onclick="recalc()">Apply</button></div>
+        <div style="margin-top:14px;display:flex;gap:8px"><button class="btn" onclick="go(2)">Continue →</button></div>
+      </div>
+      <!-- STEP 2 -->
+      <div class="card step" data-step="2" style="display:none">
+        <h3 style="margin-top:0">2 · Staff & location</h3>
+        <label>Location</label><select id="fLoc"></select>
+        <label>Staff</label><div id="staffGrid" class="staff-grid"></div>
+        <div style="margin-top:14px;display:flex;gap:8px"><button class="btn btn-ghost" onclick="go(1)">← Back</button><button class="btn" onclick="go(3)">Continue →</button></div>
+      </div>
+      <!-- STEP 3 -->
+      <div class="card step" data-step="3" style="display:none">
+        <h3 style="margin-top:0">3 · Date & time</h3>
+        <div class="grid-2"><div><label>Date</label><input id="fDate" type="date"/></div><div><label>Open hours</label><div class="kv" id="hoursHint" style="padding-top:12px"></div></div></div>
+        <label>Available times <span class="muted">(real-time, buffer-aware)</span></label>
+        <div class="slot-grid" id="slots"></div>
+        <div style="margin-top:14px;display:flex;gap:8px"><button class="btn btn-ghost" onclick="go(2)">← Back</button><button class="btn" onclick="go(4)">Continue →</button></div>
+      </div>
+      <!-- STEP 4 -->
+      <div class="card step" data-step="4" style="display:none">
+        <h3 style="margin-top:0">4 · Your details</h3>
+        <div class="grid-2">
+          <div><label>Full name *</label><input id="fName" placeholder="Juan Dela Cruz"/></div>
+          <div><label>Mobile *</label><input id="fPhone" placeholder="09xx xxx xxxx"/></div>
+        </div>
+        <div class="grid-2">
+          <div><label>Email (for reminder)</label><input id="fEmail" placeholder="you@mail.com"/></div>
+          <div><label>Payment</label><select id="fPay"><option>Cash</option><option>GCash</option><option>Card</option><option>Bank Transfer</option></select></div>
+        </div>
+        <label>Notes (goals, concerns, requests)</label><textarea id="fNotes" rows="3" placeholder="e.g. lower-back stiffness, beginner, parking request…"></textarea>
+        <div style="margin-top:14px;display:flex;gap:8px"><button class="btn btn-ghost" onclick="go(3)">← Back</button><button class="btn" onclick="go(5)">Review →</button></div>
+      </div>
+      <!-- STEP 5 -->
+      <div class="card step" data-step="5" style="display:none">
+        <h3 style="margin-top:0">5 · Review & confirm</h3>
+        <div id="review"></div>
+        <div class="notice" id="policy"></div>
+        <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-ghost" onclick="go(4)">← Back</button><button class="btn" onclick="confirmBooking()">Confirm booking →</button></div>
+        <div id="done" style="display:none;margin-top:14px"></div>
+      </div>
+    </div>
+    <div class="card summary">
+      <b>🧾 Booking summary</b>
+      <div id="sumBody" style="margin-top:8px"></div>
+      <div class="kv" style="margin-top:10px" id="sumPolicy"></div>
+    </div>
+  </div>
+</div>
+<footer><div class="container">© <span id="yr"></span> <span class="bname"></span> • <a href="manage.html">Manage booking</a></div></footer>
+<script src="js/business-config.js"></script>
+<script src="js/booking-engine.js"></script>
+<script>
+const S = { step:1, service:null, addons:new Set(), staff:"any", loc:null, date:null, time:null };
+function cfg(){ return BS.getConfig(); }
+function paint(){
+  const c=cfg();
+  document.documentElement.style.setProperty("--accent",c.business.color);
+  brandName.textContent=c.business.name; brandTag.textContent=c.business.tagline;
+  brandMark.textContent=(c.business.name||"B")[0];
+  bizLine.textContent=`${c.business.tagline} • ${c.business.address} • ${c.business.phone}`;
+  document.querySelectorAll(".bname").forEach(e=>e.textContent=c.business.name);
+  yr.textContent=new Date().getFullYear();
+  policy.innerHTML=`<b>Cancellation:</b> ${c.policies.cancel}<br><b>Payment:</b> ${c.policies.payment}`;
+  sumPolicy.textContent=`Free cancellation up to ${c.business.cancelHours}h before.`;
+}
+function init(){
+  paint();
+  const c=cfg();
+  const params=new URLSearchParams(location.search);
+  const pre=params.get("service");
+  fService.innerHTML=c.services.map(s=>`<option value="${s.id}">${s.icon||""} ${s.name} — ${c.business.currency}${s.price} • ${s.duration}m</option>`).join("");
+  if(pre && c.services.some(s=>s.id===pre)) fService.value=pre;
+  S.service=fService.value;
+  fLoc.innerHTML=c.locations.map(l=>`<option value="${l.id}">${l.name}</option>`).join("");
+  S.loc=fLoc.value;
+  const d=new Date(); d.setDate(d.getDate()+1);
+  fDate.min=new Date().toISOString().slice(0,10);
+  const max=new Date(); max.setDate(max.getDate()+(c.business.advanceDays||30));
+  fDate.max=max.toISOString().slice(0,10);
+  fDate.value=params.get("date")||d.toISOString().slice(0,10);
+  S.date=fDate.value;
+  renderService(); renderAddons(); renderStaff(); renderSlots(); recalc();
+  fService.onchange=()=>{S.service=fService.value;renderService();renderAddons();renderStaff();renderSlots();recalc();};
+  fLoc.onchange=()=>{S.loc=fLoc.value;recalc();};
+  fDate.onchange=()=>{S.date=fDate.value;renderSlots();};
+  fCoupon.oninput=recalc;
+}
+function renderService(){
+  const c=cfg();const s=c.services.find(x=>x.id===S.service);
+  svcInfo.textContent=s?`${s.desc||""} • ${s.duration} min • ${c.business.currency}${s.price}`:"";
+}
+function renderAddons(){
+  const c=cfg();
+  addons.innerHTML=(c.addons||[]).map(a=>`<button class="chip ${S.addons.has(a.id)?'on':''}" onclick="toggleAddon('${a.id}')">${a.name} • +${c.business.currency}${a.price}</button>`).join("")||'<span class="muted">No add-ons.</span>';
+}
+function toggleAddon(id){S.addons.has(id)?S.addons.delete(id):S.addons.add(id);renderAddons();recalc();}
+function renderStaff(){
+  const c=cfg();
+  const list=c.staff.filter(s=>s.id==="any"||s.services==="all"||(s.services||[]).includes(S.service));
+  staffGrid.innerHTML=list.map(s=>`<div class="staff ${S.staff===s.id?'sel':''}" onclick="pickStaff('${s.id}')"><div class="av">${s.avatar||"👤"}</div><div><b>${s.name}</b><br><span class="muted" style="font-size:13px">${s.role||""}</span></div></div>`).join("");
+  if(!list.some(s=>s.id===S.staff)) S.staff="any";
+}
+function pickStaff(id){S.staff=id;renderStaff();renderSlots();recalc();}
+function renderSlots(){
+  const c=cfg();
+  const dow=new Date(S.date+"T12:00:00").getDay();
+  const h=c.hours[String(dow)];
+  hoursHint.textContent=h?`${h.open}–${h.close}${h.breakStart?` (break ${h.breakStart}–${h.breakEnd})`:""} • ${c.business.buffer||0}m buffer`:"Closed";
+  const slots=BS.generateSlots(S.date,S.service,S.staff);
+  if(!slots.length){slotsDiv("Closed / fully booked — pick another date.");return;}
+  document.getElementById("slots").innerHTML=slots.map(s=>`<div class="slot ${s.available?'':'off'} ${S.time===s.time?'sel':''}" onclick="pickTime('${s.time}',${s.available})">${s.time}</div>`).join("");
+  function slotsDiv(m){document.getElementById("slots").innerHTML=`<div class="muted">${m}</div>`;}
+}
+function pickTime(t,ok){if(!ok)return;S.time=t;renderSlots();recalc();}
+function calc(){return BS.priceCalc(S.service,[...S.addons],fCoupon.value);}
+function recalc(){
+  const c=cfg();const s=c.services.find(x=>x.id===S.service);
+  const st=c.staff.find(x=>x.id===S.staff)||{name:"First Available"};
+  const lc=c.locations.find(x=>x.id===S.loc)||{};
+  const p=calc();
+  sumBody.innerHTML=`
+    <div class="summary-row"><span>${s?s.name:"—"}</span><b>${c.business.currency}${p.base}</b></div>
+    ${[...S.addons].map(id=>{const a=c.addons.find(x=>x.id===id);return a?`<div class="summary-row"><span>+ ${a.name}</span><span>${c.business.currency}${a.price}</span></div>`:"";}).join("")}
+    ${p.discount?`<div class="summary-row"><span>Coupon ${fCoupon.value.toUpperCase()}</span><span>−${c.business.currency}${p.discount}</span></div>`:""}
+    <div class="summary-row"><span>Staff</span><span>${st.name}</span></div>
+    <div class="summary-row"><span>When</span><span>${S.date||"—"} ${S.time||""}</span></div>
+    <div class="summary-row" style="border:0"><span><b>Total</b></span><b style="color:var(--accent);font-size:18px">${c.business.currency}${p.total}</b></div>`;
+  if(S.step===5) renderReview();
+}
+function go(n){
+  if(n===3&&!S.service) return alert("Pick a service first.");
+  if(n===4&&!S.time) return alert("Pick a time slot first.");
+  if(n===5){
+    if(!fName.value.trim()||!fPhone.value.trim()){go(4);return alert("Please enter name + mobile.");}
+    renderReview();
+  }
+  S.step=n;
+  document.querySelectorAll(".step").forEach(el=>el.style.display=el.dataset.step==n?"block":"none");
+  document.querySelectorAll("#bar div").forEach((el,i)=>el.classList.toggle("on",i<n));
+  recalc(); window.scrollTo({top:0,behavior:"smooth"});
+}
+function renderReview(){
+  const c=cfg();const s=c.services.find(x=>x.id===S.service);
+  const st=c.staff.find(x=>x.id===S.staff)||{name:"First Available"};
+  const lc=c.locations.find(x=>x.id===S.loc)||{};
+  const p=calc();
+  review.innerHTML=`
+    <div class="summary-row"><span>Service</span><b>${s.name} (${s.duration}m)</b></div>
+    <div class="summary-row"><span>Staff / Location</span><b>${st.name} • ${lc.name||""}</b></div>
+    <div class="summary-row"><span>Schedule</span><b>${S.date} @ ${S.time}</b></div>
+    <div class="summary-row"><span>Customer</span><b>${fName.value} • ${fPhone.value}</b></div>
+    <div class="summary-row"><span>Payment</span><b>${fPay.value} • Total ${c.business.currency}${p.total}</b></div>`;
+}
+function confirmBooking(){
+  const c=cfg();const s=c.services.find(x=>x.id===S.service);
+  const st=c.staff.find(x=>x.id===S.staff)||{name:"First Available",id:"any"};
+  const lc=c.locations.find(x=>x.id===S.loc)||{};
+  const p=calc();
+  // re-validate slot still free
+  const slots=BS.generateSlots(S.date,S.service,S.staff);
+  const ok=slots.find(x=>x.time===S.time&&x.available);
+  if(!ok) return alert("That slot was just taken. Please pick another time.");
+  const rec=BS.createBooking({
+    serviceId:s.id,serviceName:s.name,duration:s.duration,price:s.price,
+    staffId:st.id,staffName:st.name,locationId:lc.id,locationName:lc.name,
+    date:S.date,time:S.time,addons:[...S.addons],coupon:fCoupon.value.toUpperCase(),total:p.total,
+    name:fName.value.trim(),phone:fPhone.value.trim(),email:fEmail.value.trim(),notes:fNotes.value.trim(),pay:fPay.value
+  });
+  const ics=BS.icsFor(rec);
+  const url=URL.createObjectURL(new Blob([ics],{type:"text/calendar"}));
+  done.style.display="block";
+  done.innerHTML=`<div class="notice">🎉 <b>Booked! Ref: ${rec.ref}</b><br>${s.name} • ${rec.date} @ ${rec.time} • ${st.name}<br><br>
+    <a class="btn btn-sm" href="${url}" download="${rec.ref}.ics">⬇ Add to calendar</a>
+    <a class="btn btn-ghost btn-sm" href="manage.html?q=${rec.ref}">Manage booking →</a>
+    ${c.business.messenger?`<a class="btn btn-ghost btn-sm" target="_blank" href="${c.business.messenger}">Message us →</a>`:""}</div>`;
+  done.scrollIntoView({behavior:"smooth"});
+}
+init();
+</script>
+</body>
+</html>
